@@ -13,15 +13,11 @@
 #' study contributing to the meta-analysis.
 #' @param sample.sizes a numeric vector with the length of \code{study.names}
 #' indicating the sample size of each study.
-#' @param sumstat.dir a character value indicating the master directory of the summary
-#' statistics files (the parent directory of the study-specific summary statistics file
-#' folders).
-#' @param cov.dir a character value indicating the master directory of the sparse weighted
-#' covariance files (the parent directory of the study-specific sparse weighted
-#' covariance file folders).
-#' @param covcond.dir a character value indicating the master directory of the covariance files
-#' for conditional analysis (the parent directory of the study-specific covariance file folders
-#' for conditional analysis).
+#' @param sumstat.dir a character vector containing the directories of the study-specific summary statistics file folders.
+#' @param cov.dir a character vector containing the directories of the study-specific sparse weighted
+#' covariance file folders.
+#' @param covcond.dir a character vector containing the directories of the study-specific covariance file folders
+#' for conditional analysis.
 #' @param rare_maf_cutoff the cutoff of maximum minor allele frequency in
 #' defining rare variants (default = 0.01).
 #' @param cov_maf_cutoff a numeric vector with the length of \code{study.names}
@@ -37,6 +33,9 @@
 #' \code{\link{MetaSTAAR_worker_cov}} (default = 5e+05).
 #' @param effect.cond a character value indicating the effects of variants to be adjusted for
 #' in conditional analysis is \code{homogeneous} or \code{heterogeneous}. (Default is \code{homogeneous}).
+#' @param check_qc_label a logical value indicating whether variants need to be dropped according to \code{qc_label}
+#' specified in \code{\link{MetaSTAAR_worker_sumstat}} and \code{\link{MetaSTAAR_worker_cov}}.
+#' If \code{check_qc_label} is FALSE, it is assumed that no variant will be dropped (Default = FALSE).
 #' @return a list with the following members:
 #' @return \code{info}: the merged data frame of all variants in the given variant position list
 #' of interest whose combined minor allele frequency is below \code{rare_maf_cutoff}, including the
@@ -53,28 +52,37 @@
 MetaSTAAR_merge_varlist_cond <- function(chr,variant_pos,study.names,sample.sizes,sumstat.dir,cov.dir,covcond.dir,
                                          rare_maf_cutoff = 0.01,cov_maf_cutoff,
                                          trait,region,segment.size = 5e5,
-                                         effect.cond = c("homogeneous","heterogeneous")){
+                                         effect.cond = c("homogeneous","heterogeneous"),
+                                         check_qc_label=FALSE){
 
   if (length(variant_pos) == 0){
     return(NULL)
   }
   effect.cond <- match.arg(effect.cond) # evaluate choices
   segment <- floor((min(variant_pos) - 1) / segment.size) + 1
+  cov_maf_cutoff[cov_maf_cutoff == 0.5] <- 0.5 + 1e-16
   if (max(variant_pos) <= segment * segment.size) {
     ### summary statistics
-    sumstat.files <- paste0(sumstat.dir,study.names,"/summary.stat.",trait,".",study.names,".chr",chr,".segment",segment,".Rdata")
+    sumstat.files <- paste0(sumstat.dir,"/summary.stat.",trait,".",study.names,".chr",chr,".segment",segment,".Rdata")
     sumstat.list <- lapply(sumstat.files, function(x) {
       load(file = x)
       get(ls()[ls()!= "summary.stat"])
     })
+    sumstat.list <- lapply(sumstat.list, function(x) {
+      if (!(is.null(x)) && !("qc_label" %in% colnames(x))){
+        data.frame(x[,1:4],qc_label="PASS",x[,5:dim(x)[2]],stringsAsFactors = FALSE)
+      }else{
+        x
+      }
+    })
     position.index <- mapply(function(x,y) {
-      x[(x$MAF<y)&(x$MAF>0),"pos"]%in%variant_pos
+      x[(x$MAF<y)&(x$MAF>0)&(x$qc_label=="PASS"),"pos"]%in%variant_pos
     }, x = sumstat.list, y = cov_maf_cutoff, SIMPLIFY = FALSE)
     sumstat.list <- lapply(sumstat.list, function(x) {
       x[x$pos%in%variant_pos,]
     })
     sumstat.varid.list <- mapply(function(x,y) {
-      x[(x$MAF<y)&(x$MAF>0),1:4]
+      x[(x$MAF<y)&(x$MAF>0)&(x$qc_label=="PASS"),1:4]
     }, x = sumstat.list, y = cov_maf_cutoff, SIMPLIFY = FALSE)
     sumstat.varid.merge <- do.call("rbind",sumstat.varid.list)
     sumstat.varid.nodup <- sumstat.varid.merge[!duplicated(sumstat.varid.merge),]
@@ -85,7 +93,7 @@ MetaSTAAR_merge_varlist_cond <- function(chr,variant_pos,study.names,sample.size
     }
     sumstat.merge.list <- lapply(sumstat.list, function(x) {
       if (is.null(x)) {
-        cbind(sumstat.varid.nodup,alt_AC=NA,MAC=NA,MAF=NA,N=NA,U=NA,V=NA,"1"=NA)
+        cbind(sumstat.varid.nodup,qc_label=NA,alt_AC=NA,MAC=NA,MAF=NA,N=NA,U=NA,V=NA,"1"=NA)
       }else {
         left_join(sumstat.varid.nodup,x,by=c("chr"="chr",
                                              "pos"="pos",
@@ -95,6 +103,7 @@ MetaSTAAR_merge_varlist_cond <- function(chr,variant_pos,study.names,sample.size
     })
     sumstat.merge.list <- mapply(function(x,y) {
       x[is.na(x[,"N"]),"N"] <- y
+      x[is.na(x[,"qc_label"]),"qc_label"] <- "PASS"
       x[is.na(x)] <- 0
       return(x)
     }, x = sumstat.merge.list, y = sample.sizes, SIMPLIFY = FALSE)
@@ -113,7 +122,7 @@ MetaSTAAR_merge_varlist_cond <- function(chr,variant_pos,study.names,sample.size
     gc()
 
     ### covariance matrices
-    cov.files <- paste0(cov.dir,study.names,"/GTSinvG.rare.",trait,".",study.names,".chr",chr,".segment",segment,".Rdata")
+    cov.files <- paste0(cov.dir,"/GTSinvG.rare.",trait,".",study.names,".chr",chr,".segment",segment,".Rdata")
     cov.list <- lapply(cov.files, function(x) {
       load(file = x)
       get(ls()[ls()!= "cov"])
@@ -147,34 +156,48 @@ MetaSTAAR_merge_varlist_cond <- function(chr,variant_pos,study.names,sample.size
 
   }else if (max(variant_pos) <= (segment + 1) * segment.size) {
     ### summary statistics
-    sumstat.files1 <- paste0(sumstat.dir,study.names,"/summary.stat.",trait,".",study.names,".chr",chr,".segment",segment,".Rdata")
+    sumstat.files1 <- paste0(sumstat.dir,"/summary.stat.",trait,".",study.names,".chr",chr,".segment",segment,".Rdata")
     sumstat.list1 <- lapply(sumstat.files1, function(x) {
       load(file = x)
       get(ls()[ls()!= "summary.stat"])
     })
+    sumstat.list1 <- lapply(sumstat.list1, function(x) {
+      if (!(is.null(x)) && !("qc_label" %in% colnames(x))){
+        data.frame(x[,1:4],qc_label="PASS",x[,5:dim(x)[2]],stringsAsFactors = FALSE)
+      }else{
+        x
+      }
+    })
     position.index1 <- mapply(function(x,y) {
-      x[(x$MAF<y)&(x$MAF>0),"pos"]%in%variant_pos
+      x[(x$MAF<y)&(x$MAF>0)&(x$qc_label=="PASS"),"pos"]%in%variant_pos
     }, x = sumstat.list1, y = cov_maf_cutoff, SIMPLIFY = FALSE)
     sumstat.list1 <- lapply(sumstat.list1, function(x) {
       x[x$pos%in%variant_pos,]
     })
     sumstat.varid.list1 <- mapply(function(x,y) {
-      x[(x$MAF<y)&(x$MAF>0),1:4]
+      x[(x$MAF<y)&(x$MAF>0)&(x$qc_label=="PASS"),1:4]
     }, x = sumstat.list1, y = cov_maf_cutoff, SIMPLIFY = FALSE)
 
-    sumstat.files2 <- paste0(sumstat.dir,study.names,"/summary.stat.",trait,".",study.names,".chr",chr,".segment",segment+1,".Rdata")
+    sumstat.files2 <- paste0(sumstat.dir,"/summary.stat.",trait,".",study.names,".chr",chr,".segment",segment+1,".Rdata")
     sumstat.list2 <- lapply(sumstat.files2, function(x) {
       load(file = x)
       get(ls()[ls()!= "summary.stat"])
     })
+    sumstat.list2 <- lapply(sumstat.list2, function(x) {
+      if (!(is.null(x)) && !("qc_label" %in% colnames(x))){
+        data.frame(x[,1:4],qc_label="PASS",x[,5:dim(x)[2]],stringsAsFactors = FALSE)
+      }else{
+        x
+      }
+    })
     position.index2 <- mapply(function(x,y) {
-      x[(x$MAF<y)&(x$MAF>0),"pos"]%in%variant_pos
+      x[(x$MAF<y)&(x$MAF>0)&(x$qc_label=="PASS"),"pos"]%in%variant_pos
     }, x = sumstat.list2, y = cov_maf_cutoff, SIMPLIFY = FALSE)
     sumstat.list2 <- lapply(sumstat.list2, function(x) {
       x[x$pos%in%variant_pos,]
     })
     sumstat.varid.list2 <- mapply(function(x,y) {
-      x[(x$MAF<y)&(x$MAF>0),1:4]
+      x[(x$MAF<y)&(x$MAF>0)&(x$qc_label=="PASS"),1:4]
     }, x = sumstat.list2, y = cov_maf_cutoff, SIMPLIFY = FALSE)
 
     sumstat.list <- mapply(function(x,y) {
@@ -192,7 +215,7 @@ MetaSTAAR_merge_varlist_cond <- function(chr,variant_pos,study.names,sample.size
     }
     sumstat.merge.list <- lapply(sumstat.list, function(x) {
       if (is.null(x)) {
-        cbind(sumstat.varid.nodup,alt_AC=NA,MAC=NA,MAF=NA,N=NA,U=NA,V=NA,"1"=NA)
+        cbind(sumstat.varid.nodup,qc_label=NA,alt_AC=NA,MAC=NA,MAF=NA,N=NA,U=NA,V=NA,"1"=NA)
       }else {
         left_join(sumstat.varid.nodup,x,by=c("chr"="chr",
                                              "pos"="pos",
@@ -202,6 +225,7 @@ MetaSTAAR_merge_varlist_cond <- function(chr,variant_pos,study.names,sample.size
     })
     sumstat.merge.list <- mapply(function(x,y) {
       x[is.na(x[,"N"]),"N"] <- y
+      x[is.na(x[,"qc_label"]),"qc_label"] <- "PASS"
       x[is.na(x)] <- 0
       return(x)
     }, x = sumstat.merge.list, y = sample.sizes, SIMPLIFY = FALSE)
@@ -232,7 +256,7 @@ MetaSTAAR_merge_varlist_cond <- function(chr,variant_pos,study.names,sample.size
     gc()
 
     ### covariance matrices
-    cov.files1 <- paste0(cov.dir,study.names,"/GTSinvG.rare.",trait,".",study.names,".chr",chr,".segment",segment,".Rdata")
+    cov.files1 <- paste0(cov.dir,"/GTSinvG.rare.",trait,".",study.names,".chr",chr,".segment",segment,".Rdata")
     cov.list1 <- lapply(cov.files1, function(x) {
       load(file = x)
       get(ls()[ls()!= "cov"])
@@ -244,7 +268,7 @@ MetaSTAAR_merge_varlist_cond <- function(chr,variant_pos,study.names,sample.size
       x[y,c(y,z)]
     }, x = cov.list1, y = position.index1, z = position.index2, SIMPLIFY = FALSE)
 
-    cov.files2 <- paste0(cov.dir,study.names,"/GTSinvG.rare.",trait,".",study.names,".chr",chr,".segment",segment+1,".Rdata")
+    cov.files2 <- paste0(cov.dir,"/GTSinvG.rare.",trait,".",study.names,".chr",chr,".segment",segment+1,".Rdata")
     cov.list2 <- lapply(cov.files2, function(x) {
       load(file = x)
       get(ls()[ls()!= "cov"])
@@ -333,12 +357,17 @@ MetaSTAAR_merge_varlist_cond <- function(chr,variant_pos,study.names,sample.size
   rv.index <- (MAF.merge<rare_maf_cutoff) & Reduce("*",mapply(function(x,y) {
     x$MAF<y
   }, x = sumstat.merge.list, y = cov_maf_cutoff, SIMPLIFY = FALSE))
+  if (check_qc_label){
+    rv.index <- rv.index & Reduce("*",lapply(sumstat.merge.list, function(x) {
+      x$qc_label=="PASS"
+    }))
+  }
 
   info <- cbind(sumstat.varid.nodup[,c("chr","pos","ref","alt")],
                 MAC=MAC.merge,MAF=MAF.merge)[rv.index,]
 
   ### covariance files for conditional analysis
-  covcond.files <- paste0(covcond.dir,study.names,"/cov.cond.",trait,".",study.names,".chr",chr,".region.",region,".Rdata")
+  covcond.files <- paste0(covcond.dir,"/cov.cond.",trait,".",study.names,".chr",chr,".region.",region,".Rdata")
   covcond.list <- lapply(covcond.files, function(x) {
     load(file = x)
     get(ls()[ls()!= "cov.cond"])
@@ -357,14 +386,31 @@ MetaSTAAR_merge_varlist_cond <- function(chr,variant_pos,study.names,sample.size
                                           "alt"="alt"))$index
     }
   })
-  covcond.list <- mapply(function(x,y) {
-    GTPG_cond_nodup <- matrix(0, nrow = dim(variant_info_nodup)[1], ncol = dim(covcond.list[[1]]$GTPG_cond)[2])
-    GTPG_cond_nodup[y,] <- x$GTPG_cond
+  variant_adj_info_list <- lapply(covcond.list, function(x) {x$variant_adj_info[,1:4]})
+  variant_adj_info_merge <- do.call("rbind",variant_adj_info_list)
+  variant_adj_info_nodup <- variant_adj_info_merge[!duplicated(variant_adj_info_merge),]
+  variant_adj_info_nodup$index <- 1:dim(variant_adj_info_nodup)[1]
+  variant_adj_info_index_list <- lapply(variant_adj_info_list, function(x) {
+    if (is.null(x)) {
+      integer(0)
+    }else{
+      left_join(x,variant_adj_info_nodup,by=c("chr"="chr",
+                                              "pos"="pos",
+                                              "ref"="ref",
+                                              "alt"="alt"))$index
+    }
+  })
+  covcond.list <- mapply(function(x,y,z) {
+    GTPG_cond_nodup <- matrix(0, nrow = dim(variant_info_nodup)[1], ncol = dim(variant_adj_info_nodup)[1])
+    GTPG_cond_nodup[y,z] <- x$GTPG_cond
+    variant_adj_info_nodup <- data.frame(variant_adj_info_nodup[,c("chr","pos","ref","alt")], U = 0, V = 0)
+    variant_adj_info_nodup[z,] <- x$variant_adj_info
     return(list(GTPG_cond = GTPG_cond_nodup,
                 variant_info = variant_info_nodup[,c("chr","pos","ref","alt")],
-                variant_adj_info = x$variant_adj_info))
-  },x = covcond.list, y = variant_info_index_list, SIMPLIFY = FALSE)
-  rm(variant_info_list,variant_info_merge,variant_info_nodup,variant_info_index_list)
+                variant_adj_info = variant_adj_info_nodup))
+  },x = covcond.list, y = variant_info_index_list, z = variant_adj_info_index_list, SIMPLIFY = FALSE)
+  rm(variant_info_list,variant_info_merge,variant_info_nodup,variant_info_index_list,
+     variant_adj_info_list,variant_adj_info_merge,variant_adj_info_nodup,variant_adj_info_index_list)
   gc()
 
   variant_info <- covcond.list[[1]]$variant_info
@@ -400,7 +446,7 @@ MetaSTAAR_merge_varlist_cond <- function(chr,variant_pos,study.names,sample.size
       cov.rare.adj.merge <- Reduce("+", lapply(GTPG_cond.list, function(x) {x[var.rare.index,]}))
       cov.adj.merge <- Reduce("+", lapply(GTPG_cond.list, function(x) {x[var.adj.index,]}))
       cov.rare.merge <- Reduce("+", mapply(function(x,y) {
-        (x - as.matrix(y[,11:dim(y)[2]]) %*% t(as.matrix(y[,11:dim(y)[2]])))[rv.index, rv.index][-ex.index,-ex.index]
+        (x - as.matrix(y[,12:dim(y)[2]]) %*% t(as.matrix(y[,12:dim(y)[2]])))[rv.index, rv.index][-ex.index,-ex.index]
       }, x = cov.merge.list, y = sumstat.merge.list, SIMPLIFY = FALSE))
 
       U.merge <- U.rare.merge-cov.rare.adj.merge%*%ginv(cov.adj.merge)%*%U.adj.merge # Do not use solve()
@@ -414,7 +460,7 @@ MetaSTAAR_merge_varlist_cond <- function(chr,variant_pos,study.names,sample.size
       }, x = sumstat.merge.list, y = U_adj.list, z = GTPG_cond.list, SIMPLIFY = FALSE))
 
       cov.merge <- Reduce("+", mapply(function(x,y,z) {
-        cov <- (x - as.matrix(y[,11:dim(y)[2]]) %*% t(as.matrix(y[,11:dim(y)[2]])))[rv.index, rv.index][-ex.index,-ex.index]
+        cov <- (x - as.matrix(y[,12:dim(y)[2]]) %*% t(as.matrix(y[,12:dim(y)[2]])))[rv.index, rv.index][-ex.index,-ex.index]
         z.rare <- z[var.rare.index,]
         z.adj <- z[var.adj.index,]
         return(cov-z.rare%*%ginv(z.adj)%*%t(z.rare))
@@ -427,7 +473,7 @@ MetaSTAAR_merge_varlist_cond <- function(chr,variant_pos,study.names,sample.size
       cov.rare.adj.merge <- Reduce("+", lapply(GTPG_cond.list, function(x) {x[var.rare.index,]}))
       cov.adj.merge <- Reduce("+", lapply(GTPG_cond.list, function(x) {x[var.adj.index,]}))
       cov.rare.merge <- Reduce("+", mapply(function(x,y) {
-        (x - as.matrix(y[,11:dim(y)[2]]) %*% t(as.matrix(y[,11:dim(y)[2]])))[rv.index, rv.index]
+        (x - as.matrix(y[,12:dim(y)[2]]) %*% t(as.matrix(y[,12:dim(y)[2]])))[rv.index, rv.index]
       }, x = cov.merge.list, y = sumstat.merge.list, SIMPLIFY = FALSE))
 
       U.merge <- U.rare.merge-cov.rare.adj.merge%*%ginv(cov.adj.merge)%*%U.adj.merge # Do not use solve()
@@ -441,7 +487,7 @@ MetaSTAAR_merge_varlist_cond <- function(chr,variant_pos,study.names,sample.size
       }, x = sumstat.merge.list, y = U_adj.list, z = GTPG_cond.list, SIMPLIFY = FALSE))
 
       cov.merge <- Reduce("+", mapply(function(x,y,z) {
-        cov <- (x - as.matrix(y[,11:dim(y)[2]]) %*% t(as.matrix(y[,11:dim(y)[2]])))[rv.index, rv.index]
+        cov <- (x - as.matrix(y[,12:dim(y)[2]]) %*% t(as.matrix(y[,12:dim(y)[2]])))[rv.index, rv.index]
         z.rare <- z[var.rare.index,]
         z.adj <- z[var.adj.index,]
         return(cov-z.rare%*%ginv(z.adj)%*%t(z.rare))

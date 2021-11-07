@@ -4,7 +4,12 @@
 \alias{MetaSTAAR_worker_sumstat}
 \title{Generating summary statistics file using MetaSTAAR_worker}
 \usage{
-MetaSTAAR_worker_sumstat(genotype, obj_nullmodel, variant_info)
+MetaSTAAR_worker_sumstat(
+  genotype,
+  obj_nullmodel,
+  variant_info,
+  qc_label = NULL
+)
 }
 \arguments{
 \item{genotype}{an n*p genotype matrix (dosage matrix) of the target sequence,
@@ -17,11 +22,14 @@ output from either \code{\link{fit_null_glm}} function for unrelated samples or
 \item{variant_info}{a data frame or matrix of variant information (unique identifier)
 with p rows (listed in the same order as the columns of \code{genotype}) and should contain
 the following 4 columns: chromosome (chr), position (pos), reference allele (ref), and alternative allele (alt).}
+
+\item{qc_label}{a vector of quality control status for each variant in \code{variant_info}, where a pass variant
+is labeled as "PASS". If \code{qc_label} is NULL, it is assumed that all variants are pass variants in the study (Default = NULL).}
 }
 \value{
 \code{sumstat}: the data frame of all variants in the variant-set (the summary statistics file),
 including the following information: chromosome (chr), position (pos), reference allele (ref),
-alternative allele (alt), alternative allele count (alt_AC), minor allele count (MAC),
+alternative allele (alt), quality control status (qc_label, optional), alternative allele count (alt_AC), minor allele count (MAC),
 minor allele frequency (MAF), study sample size (N), score statistic (U), variance (V), and
 the (low-rank decomposed) dense component of the covariance file.
 }

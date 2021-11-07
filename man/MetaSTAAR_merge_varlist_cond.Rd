@@ -17,7 +17,8 @@ MetaSTAAR_merge_varlist_cond(
   trait,
   region,
   segment.size = 5e+05,
-  effect.cond = c("homogeneous", "heterogeneous")
+  effect.cond = c("homogeneous", "heterogeneous"),
+  check_qc_label = FALSE
 )
 }
 \arguments{
@@ -32,17 +33,13 @@ study contributing to the meta-analysis.}
 \item{sample.sizes}{a numeric vector with the length of \code{study.names}
 indicating the sample size of each study.}
 
-\item{sumstat.dir}{a character value indicating the master directory of the summary
-statistics files (the parent directory of the study-specific summary statistics file
-folders).}
+\item{sumstat.dir}{a character vector containing the directories of the study-specific summary statistics file folders.}
 
-\item{cov.dir}{a character value indicating the master directory of the sparse weighted
-covariance files (the parent directory of the study-specific sparse weighted
-covariance file folders).}
+\item{cov.dir}{a character vector containing the directories of the study-specific sparse weighted
+covariance file folders.}
 
-\item{covcond.dir}{a character value indicating the master directory of the covariance files
-for conditional analysis (the parent directory of the study-specific covariance file folders
-for conditional analysis).}
+\item{covcond.dir}{a character vector containing the directories of the study-specific covariance file folders
+for conditional analysis.}
 
 \item{rare_maf_cutoff}{the cutoff of maximum minor allele frequency in
 defining rare variants (default = 0.01).}
@@ -64,6 +61,10 @@ Note that the input value should be aligned with the inpue values of
 
 \item{effect.cond}{a character value indicating the effects of variants to be adjusted for
 in conditional analysis is \code{homogeneous} or \code{heterogeneous}. (Default is \code{homogeneous}).}
+
+\item{check_qc_label}{a logical value indicating whether variants need to be dropped according to \code{qc_label}
+specified in \code{\link{MetaSTAAR_worker_sumstat}} and \code{\link{MetaSTAAR_worker_cov}}.
+If \code{check_qc_label} is FALSE, it is assumed that no variant will be dropped (Default = FALSE).}
 }
 \value{
 a list with the following members:

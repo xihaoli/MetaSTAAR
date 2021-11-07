@@ -11,13 +11,15 @@
 #' @param variant_info a data frame or matrix of variant information (unique identifier)
 #' with p rows (listed in the same order as the columns of \code{genotype}) and should contain
 #' the following 4 columns: chromosome (chr), position (pos), reference allele (ref), and alternative allele (alt).
+#' @param qc_label a vector of quality control status for each variant in \code{variant_info}, where a pass variant
+#' is labeled as "PASS". If \code{qc_label} is NULL, it is assumed that all variants are pass variants in the study (Default = NULL).
 #' @return \code{sumstat}: the data frame of all variants in the variant-set (the summary statistics file),
 #' including the following information: chromosome (chr), position (pos), reference allele (ref),
-#' alternative allele (alt), alternative allele count (alt_AC), minor allele count (MAC),
+#' alternative allele (alt), quality control status (qc_label, optional), alternative allele count (alt_AC), minor allele count (MAC),
 #' minor allele frequency (MAF), study sample size (N), score statistic (U), variance (V), and
 #' the (low-rank decomposed) dense component of the covariance file.
 
-MetaSTAAR_worker_sumstat <- function(genotype,obj_nullmodel,variant_info){
+MetaSTAAR_worker_sumstat <- function(genotype,obj_nullmodel,variant_info,qc_label=NULL){
 
   if(class(genotype) != "matrix" && !(!is.null(attr(class(genotype), "package")) && attr(class(genotype), "package") == "Matrix")){
     stop("genotype is not a matrix!")
@@ -29,6 +31,10 @@ MetaSTAAR_worker_sumstat <- function(genotype,obj_nullmodel,variant_info){
 
   if(dim(genotype)[2] != dim(variant_info)[1]){
     stop(paste0("Dimensions don't match for genotype and variant_info!"))
+  }
+
+  if(!is.null(qc_label) && dim(variant_info)[1] != length(qc_label)){
+    stop(paste0("Dimensions don't match for variant_info and qc_label!"))
   }
 
   N <- dim(genotype)[1]
@@ -59,12 +65,16 @@ MetaSTAAR_worker_sumstat <- function(genotype,obj_nullmodel,variant_info){
 
   GTSinvX_cov <- as(t(Geno) %*% obj_nullmodel$Sigma_iX,"matrix") %*% sqrtm(obj_nullmodel$cov)
   #V <- diag(t(Geno) %*% obj_nullmodel$Sigma_i %*% Geno - GTSinvX_cov %*% t(GTSinvX_cov))
-  V <- colSums(Geno * (obj_nullmodel$Sigma_i %*% Geno)) - rowSums(GTSinvX_cov^2) # faster for large no. variants
+  V <- colSums(Geno * (obj_nullmodel$Sigma_i %*% Geno)) - rowSums(GTSinvX_cov^2) # faster for large number of variants
   U <- as.vector(t(Geno) %*% obj_nullmodel$scaled.residuals)
   rm(Geno)
   gc()
 
-  sumstat <- data.frame(variant_info[,c("chr","pos","ref","alt")],alt_AC,MAC,MAF,N)
+  if (!is.null(qc_label)){
+    sumstat <- data.frame(variant_info[,c("chr","pos","ref","alt")],qc_label,alt_AC,MAC,MAF,N)
+  }else{
+    sumstat <- data.frame(variant_info[,c("chr","pos","ref","alt")],alt_AC,MAC,MAF,N)
+  }
   sumstat <- sumstat[variant_label,]
   sumstat <- cbind(sumstat,U,V,GTSinvX_cov)
 

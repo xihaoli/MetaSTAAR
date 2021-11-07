@@ -16,6 +16,8 @@
 #' of \code{genotype}) indicating the position of the variants in the variant-set.
 #' @param region_midpos a numeric value indicating the middle position of variant-set
 #' by which the shorter edge of the rectangle is defined.
+#' @param qc_label a vector of quality control status for each variant in \code{variant_pos}, where a pass variant
+#' is labeled as "PASS". If \code{qc_label} is NULL, it is assumed that all variants are pass variants in the study (Default = NULL).
 #' @param segment.size a numeric value indicating the length of each segment of which
 #' the sparse weighted covariance file is stored (default = 5e+05).
 #' @param signif.digits an integer indicating the number of significant digits to be used
@@ -25,7 +27,7 @@
 #' covariance file), stored as a rectangle format.
 
 MetaSTAAR_worker_cov <- function(genotype,obj_nullmodel,cov_maf_cutoff,
-                                 variant_pos,region_midpos,segment.size=5e5,signif.digits=3){
+                                 variant_pos,region_midpos,qc_label=NULL,segment.size=5e5,signif.digits=3){
 
   if(class(genotype) != "matrix" && !(!is.null(attr(class(genotype), "package")) && attr(class(genotype), "package") == "Matrix")){
     stop("genotype is not a matrix!")
@@ -35,13 +37,25 @@ MetaSTAAR_worker_cov <- function(genotype,obj_nullmodel,cov_maf_cutoff,
     stop("cov_maf_cutoff should be a number between 0 and 0.5!")
   }
 
+  if (cov_maf_cutoff == 0.5){
+    cov_maf_cutoff <- 0.5 + 1e-16
+  }
+
   if(dim(genotype)[2] != length(variant_pos)){
-    stop(paste0("Dimensions don't match for genotype and variant position!"))
+    stop(paste0("Dimensions don't match for genotype and variant_pos!"))
+  }
+
+  if(!is.null(qc_label) && length(variant_pos) != length(qc_label)){
+    stop(paste0("Dimensions don't match for variant_pos and qc_label!"))
   }
 
   if(!is.null(attr(class(genotype), "package")) && attr(class(genotype), "package") == "Matrix"){
     MAF <- colMeans(genotype)/2
-    RV_label <- as.vector((MAF<cov_maf_cutoff)&(MAF>0))
+    if (!is.null(qc_label)){
+      RV_label <- as.vector((MAF<cov_maf_cutoff)&(MAF>0)&(qc_label=="PASS"))
+    }else{
+      RV_label <- as.vector((MAF<cov_maf_cutoff)&(MAF>0))
+    }
     Geno_rare <- genotype[,RV_label,drop=FALSE]
     Geno_rare_1 <- Geno_rare[,variant_pos[RV_label] <= region_midpos,drop=FALSE]
     Geno_rare <- as(Geno_rare,"dgCMatrix")
@@ -49,7 +63,11 @@ MetaSTAAR_worker_cov <- function(genotype,obj_nullmodel,cov_maf_cutoff,
   }else{
     genotype <- matrix_flip(genotype)
     MAF <- genotype$MAF
-    RV_label <- as.vector((MAF<cov_maf_cutoff)&(MAF>0))
+    if (!is.null(qc_label)){
+      RV_label <- as.vector((MAF<cov_maf_cutoff)&(MAF>0)&(qc_label=="PASS"))
+    }else{
+      RV_label <- as.vector((MAF<cov_maf_cutoff)&(MAF>0))
+    }
     Geno_rare <- genotype$Geno[,RV_label,drop=FALSE]
     Geno_rare_1 <- Geno_rare[,variant_pos[RV_label] <= region_midpos,drop=FALSE]
     Geno_rare <- as(Geno_rare,"dgCMatrix")

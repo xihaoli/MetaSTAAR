@@ -11,12 +11,9 @@
 #' study contributing to the meta-analysis.
 #' @param sample.sizes a numeric vector with the length of \code{study.names}
 #' indicating the sample size of each study.
-#' @param sumstat.dir a character value indicating the master directory of the summary
-#' statistics files (the parent directory of the study-specific summary statistics file
-#' folders).
-#' @param cov.dir a character value indicating the master directory of the sparse weighted
-#' covariance files (the parent directory of the study-specific sparse weighted
-#' covariance file folders).
+#' @param sumstat.dir a character vector containing the directories of the study-specific summary statistics file folders.
+#' @param cov.dir a character vector containing the directories of the study-specific sparse weighted
+#' covariance file folders.
 #' @param rare_maf_cutoff the cutoff of maximum minor allele frequency in
 #' defining rare variants (default = 0.01).
 #' @param cov_maf_cutoff a numeric vector with the length of \code{study.names}
@@ -28,6 +25,9 @@
 #' the summary statistics and sparse weighted covariance files are stored.
 #' Note that the input value should be aligned with the inpue values of
 #' \code{\link{MetaSTAAR_worker_cov}} (default = 5e+05).
+#' @param check_qc_label a logical value indicating whether variants need to be dropped according to \code{qc_label}
+#' specified in \code{\link{MetaSTAAR_worker_sumstat}} and \code{\link{MetaSTAAR_worker_cov}}.
+#' If \code{check_qc_label} is FALSE, it is assumed that no variant will be dropped (Default = FALSE).
 #' @return a list with the following members:
 #' @return \code{info}: the merged data frame of all variants in the given variant position list
 #' of interest whose combined minor allele frequency is below \code{rare_maf_cutoff}, including the
@@ -41,27 +41,35 @@
 
 MetaSTAAR_merge_varlist <- function(chr,variant_pos,study.names,sample.sizes,sumstat.dir,cov.dir,
                                     rare_maf_cutoff = 0.01,cov_maf_cutoff,
-                                    trait,segment.size = 5e5){
+                                    trait,segment.size = 5e5,check_qc_label=FALSE){
 
   if (length(variant_pos) == 0){
     return(NULL)
   }
   segment <- floor((min(variant_pos) - 1) / segment.size) + 1
+  cov_maf_cutoff[cov_maf_cutoff == 0.5] <- 0.5 + 1e-16
   if (max(variant_pos) <= segment * segment.size) {
     ### summary statistics
-    sumstat.files <- paste0(sumstat.dir,study.names,"/summary.stat.",trait,".",study.names,".chr",chr,".segment",segment,".Rdata")
+    sumstat.files <- paste0(sumstat.dir,"/summary.stat.",trait,".",study.names,".chr",chr,".segment",segment,".Rdata")
     sumstat.list <- lapply(sumstat.files, function(x) {
       load(file = x)
       get(ls()[ls()!= "summary.stat"])
     })
+    sumstat.list <- lapply(sumstat.list, function(x) {
+      if (!(is.null(x)) && !("qc_label" %in% colnames(x))){
+        data.frame(x[,1:4],qc_label="PASS",x[,5:dim(x)[2]],stringsAsFactors = FALSE)
+      }else{
+        x
+      }
+    })
     position.index <- mapply(function(x,y) {
-      x[(x$MAF<y)&(x$MAF>0),"pos"]%in%variant_pos
+      x[(x$MAF<y)&(x$MAF>0)&(x$qc_label=="PASS"),"pos"]%in%variant_pos
     }, x = sumstat.list, y = cov_maf_cutoff, SIMPLIFY = FALSE)
     sumstat.list <- lapply(sumstat.list, function(x) {
       x[x$pos%in%variant_pos,]
     })
     sumstat.varid.list <- mapply(function(x,y) {
-      x[(x$MAF<y)&(x$MAF>0),1:4]
+      x[(x$MAF<y)&(x$MAF>0)&(x$qc_label=="PASS"),1:4]
     }, x = sumstat.list, y = cov_maf_cutoff, SIMPLIFY = FALSE)
     sumstat.varid.merge <- do.call("rbind",sumstat.varid.list)
     sumstat.varid.nodup <- sumstat.varid.merge[!duplicated(sumstat.varid.merge),]
@@ -72,7 +80,7 @@ MetaSTAAR_merge_varlist <- function(chr,variant_pos,study.names,sample.sizes,sum
     }
     sumstat.merge.list <- lapply(sumstat.list, function(x) {
       if (is.null(x)) {
-        cbind(sumstat.varid.nodup,alt_AC=NA,MAC=NA,MAF=NA,N=NA,U=NA,V=NA,"1"=NA)
+        cbind(sumstat.varid.nodup,qc_label=NA,alt_AC=NA,MAC=NA,MAF=NA,N=NA,U=NA,V=NA,"1"=NA)
       }else {
         left_join(sumstat.varid.nodup,x,by=c("chr"="chr",
                                              "pos"="pos",
@@ -82,6 +90,7 @@ MetaSTAAR_merge_varlist <- function(chr,variant_pos,study.names,sample.sizes,sum
     })
     sumstat.merge.list <- mapply(function(x,y) {
       x[is.na(x[,"N"]),"N"] <- y
+      x[is.na(x[,"qc_label"]),"qc_label"] <- "PASS"
       x[is.na(x)] <- 0
       return(x)
     }, x = sumstat.merge.list, y = sample.sizes, SIMPLIFY = FALSE)
@@ -100,7 +109,7 @@ MetaSTAAR_merge_varlist <- function(chr,variant_pos,study.names,sample.sizes,sum
     gc()
 
     ### covariance matrices
-    cov.files <- paste0(cov.dir,study.names,"/GTSinvG.rare.",trait,".",study.names,".chr",chr,".segment",segment,".Rdata")
+    cov.files <- paste0(cov.dir,"/GTSinvG.rare.",trait,".",study.names,".chr",chr,".segment",segment,".Rdata")
     cov.list <- lapply(cov.files, function(x) {
       load(file = x)
       get(ls()[ls()!= "cov"])
@@ -134,34 +143,48 @@ MetaSTAAR_merge_varlist <- function(chr,variant_pos,study.names,sample.sizes,sum
 
   }else if (max(variant_pos) <= (segment + 1) * segment.size) {
     ### summary statistics
-    sumstat.files1 <- paste0(sumstat.dir,study.names,"/summary.stat.",trait,".",study.names,".chr",chr,".segment",segment,".Rdata")
+    sumstat.files1 <- paste0(sumstat.dir,"/summary.stat.",trait,".",study.names,".chr",chr,".segment",segment,".Rdata")
     sumstat.list1 <- lapply(sumstat.files1, function(x) {
       load(file = x)
       get(ls()[ls()!= "summary.stat"])
     })
+    sumstat.list1 <- lapply(sumstat.list1, function(x) {
+      if (!(is.null(x)) && !("qc_label" %in% colnames(x))){
+        data.frame(x[,1:4],qc_label="PASS",x[,5:dim(x)[2]],stringsAsFactors = FALSE)
+      }else{
+        x
+      }
+    })
     position.index1 <- mapply(function(x,y) {
-      x[(x$MAF<y)&(x$MAF>0),"pos"]%in%variant_pos
+      x[(x$MAF<y)&(x$MAF>0)&(x$qc_label=="PASS"),"pos"]%in%variant_pos
     }, x = sumstat.list1, y = cov_maf_cutoff, SIMPLIFY = FALSE)
     sumstat.list1 <- lapply(sumstat.list1, function(x) {
       x[x$pos%in%variant_pos,]
     })
     sumstat.varid.list1 <- mapply(function(x,y) {
-      x[(x$MAF<y)&(x$MAF>0),1:4]
+      x[(x$MAF<y)&(x$MAF>0)&(x$qc_label=="PASS"),1:4]
     }, x = sumstat.list1, y = cov_maf_cutoff, SIMPLIFY = FALSE)
 
-    sumstat.files2 <- paste0(sumstat.dir,study.names,"/summary.stat.",trait,".",study.names,".chr",chr,".segment",segment+1,".Rdata")
+    sumstat.files2 <- paste0(sumstat.dir,"/summary.stat.",trait,".",study.names,".chr",chr,".segment",segment+1,".Rdata")
     sumstat.list2 <- lapply(sumstat.files2, function(x) {
       load(file = x)
       get(ls()[ls()!= "summary.stat"])
     })
+    sumstat.list2 <- lapply(sumstat.list2, function(x) {
+      if (!(is.null(x)) && !("qc_label" %in% colnames(x))){
+        data.frame(x[,1:4],qc_label="PASS",x[,5:dim(x)[2]],stringsAsFactors = FALSE)
+      }else{
+        x
+      }
+    })
     position.index2 <- mapply(function(x,y) {
-      x[(x$MAF<y)&(x$MAF>0),"pos"]%in%variant_pos
+      x[(x$MAF<y)&(x$MAF>0)&(x$qc_label=="PASS"),"pos"]%in%variant_pos
     }, x = sumstat.list2, y = cov_maf_cutoff, SIMPLIFY = FALSE)
     sumstat.list2 <- lapply(sumstat.list2, function(x) {
       x[x$pos%in%variant_pos,]
     })
     sumstat.varid.list2 <- mapply(function(x,y) {
-      x[(x$MAF<y)&(x$MAF>0),1:4]
+      x[(x$MAF<y)&(x$MAF>0)&(x$qc_label=="PASS"),1:4]
     }, x = sumstat.list2, y = cov_maf_cutoff, SIMPLIFY = FALSE)
 
     sumstat.list <- mapply(function(x,y) {
@@ -179,7 +202,7 @@ MetaSTAAR_merge_varlist <- function(chr,variant_pos,study.names,sample.sizes,sum
     }
     sumstat.merge.list <- lapply(sumstat.list, function(x) {
       if (is.null(x)) {
-        cbind(sumstat.varid.nodup,alt_AC=NA,MAC=NA,MAF=NA,N=NA,U=NA,V=NA,"1"=NA)
+        cbind(sumstat.varid.nodup,qc_label=NA,alt_AC=NA,MAC=NA,MAF=NA,N=NA,U=NA,V=NA,"1"=NA)
       }else {
         left_join(sumstat.varid.nodup,x,by=c("chr"="chr",
                                              "pos"="pos",
@@ -189,6 +212,7 @@ MetaSTAAR_merge_varlist <- function(chr,variant_pos,study.names,sample.sizes,sum
     })
     sumstat.merge.list <- mapply(function(x,y) {
       x[is.na(x[,"N"]),"N"] <- y
+      x[is.na(x[,"qc_label"]),"qc_label"] <- "PASS"
       x[is.na(x)] <- 0
       return(x)
     }, x = sumstat.merge.list, y = sample.sizes, SIMPLIFY = FALSE)
@@ -219,7 +243,7 @@ MetaSTAAR_merge_varlist <- function(chr,variant_pos,study.names,sample.sizes,sum
     gc()
 
     ### covariance matrices
-    cov.files1 <- paste0(cov.dir,study.names,"/GTSinvG.rare.",trait,".",study.names,".chr",chr,".segment",segment,".Rdata")
+    cov.files1 <- paste0(cov.dir,"/GTSinvG.rare.",trait,".",study.names,".chr",chr,".segment",segment,".Rdata")
     cov.list1 <- lapply(cov.files1, function(x) {
       load(file = x)
       get(ls()[ls()!= "cov"])
@@ -231,7 +255,7 @@ MetaSTAAR_merge_varlist <- function(chr,variant_pos,study.names,sample.sizes,sum
       x[y,c(y,z)]
     }, x = cov.list1, y = position.index1, z = position.index2, SIMPLIFY = FALSE)
 
-    cov.files2 <- paste0(cov.dir,study.names,"/GTSinvG.rare.",trait,".",study.names,".chr",chr,".segment",segment+1,".Rdata")
+    cov.files2 <- paste0(cov.dir,"/GTSinvG.rare.",trait,".",study.names,".chr",chr,".segment",segment+1,".Rdata")
     cov.list2 <- lapply(cov.files2, function(x) {
       load(file = x)
       get(ls()[ls()!= "cov"])
@@ -320,6 +344,11 @@ MetaSTAAR_merge_varlist <- function(chr,variant_pos,study.names,sample.sizes,sum
   rv.index <- (MAF.merge<rare_maf_cutoff) & Reduce("*",mapply(function(x,y) {
     x$MAF<y
   }, x = sumstat.merge.list, y = cov_maf_cutoff, SIMPLIFY = FALSE))
+  if (check_qc_label){
+    rv.index <- rv.index & Reduce("*",lapply(sumstat.merge.list, function(x) {
+      x$qc_label=="PASS"
+    }))
+  }
 
   info <- cbind(sumstat.varid.nodup[,c("chr","pos","ref","alt")],
                 MAC=MAC.merge,MAF=MAF.merge)[rv.index,]
@@ -330,7 +359,7 @@ MetaSTAAR_merge_varlist <- function(chr,variant_pos,study.names,sample.sizes,sum
   }))
 
   cov.merge <- Reduce("+", mapply(function(x,y) {
-    (x - as.matrix(y[,11:dim(y)[2]]) %*% t(as.matrix(y[,11:dim(y)[2]])))[rv.index, rv.index]
+    (x - as.matrix(y[,12:dim(y)[2]]) %*% t(as.matrix(y[,12:dim(y)[2]])))[rv.index, rv.index]
   }, x = cov.merge.list, y = sumstat.merge.list, SIMPLIFY = FALSE))
 
   rm(list=setdiff(ls(), c("info","U.merge","cov.merge")))

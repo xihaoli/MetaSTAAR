@@ -10,6 +10,7 @@ MetaSTAAR_worker_cov(
   cov_maf_cutoff,
   variant_pos,
   region_midpos,
+  qc_label = NULL,
   segment.size = 5e+05,
   signif.digits = 3
 )
@@ -32,6 +33,9 @@ of \code{genotype}) indicating the position of the variants in the variant-set.}
 
 \item{region_midpos}{a numeric value indicating the middle position of variant-set
 by which the shorter edge of the rectangle is defined.}
+
+\item{qc_label}{a vector of quality control status for each variant in \code{variant_pos}, where a pass variant
+is labeled as "PASS". If \code{qc_label} is NULL, it is assumed that all variants are pass variants in the study (Default = NULL).}
 
 \item{segment.size}{a numeric value indicating the length of each segment of which
 the sparse weighted covariance file is stored (default = 5e+05).}

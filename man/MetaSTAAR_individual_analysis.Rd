@@ -13,7 +13,8 @@ MetaSTAAR_individual_analysis(
   sumstat.dir,
   common_mac_cutoff,
   trait,
-  segment.size = 5e+05
+  segment.size = 5e+05,
+  check_qc_label = FALSE
 )
 }
 \arguments{
@@ -31,9 +32,7 @@ study contributing to the meta-analysis.}
 \item{sample.sizes}{a numeric vector with the length of \code{study.names}
 indicating the sample size of each study.}
 
-\item{sumstat.dir}{a character value indicating the master directory of the summary
-statistics files (the parent directory of the study-specific summary statistics file
-folders).}
+\item{sumstat.dir}{a character vector containing the directories of the study-specific summary statistics file folders.}
 
 \item{common_mac_cutoff}{the cutoff of minimum combined minor allele count (inclusive) in
 defining "common" variants.}
@@ -45,6 +44,10 @@ the meta-analysis.}
 the summary statistics and sparse weighted covariance files are stored.
 Note that the input value should be aligned with the inpue values of
 \code{\link{MetaSTAAR_worker_cov}} (default = 5e+05).}
+
+\item{check_qc_label}{a logical value indicating whether variants need to be dropped according to \code{qc_label}
+specified in \code{\link{MetaSTAAR_worker_sumstat}} and \code{\link{MetaSTAAR_worker_cov}}.
+If \code{check_qc_label} is FALSE, it is assumed that no variant will be dropped (Default = FALSE).}
 }
 \value{
 a data frame with p rows corresponding to the p genetic variants in the merged variant list
