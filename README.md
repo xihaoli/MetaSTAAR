@@ -11,7 +11,7 @@ MetaSTAAR links to R packages <a href="https://cran.r-project.org/web/packages/R
 ## Installation
 ```
 library(devtools)
-devtools::install_github("xihaoli/MetaSTAAR")
+devtools::install_github("xihaoli/MetaSTAAR",ref="main")
 ```
 ## Usage
 Please see the <a href="docs/MetaSTAAR_manual.pdf">**MetaSTAAR** user manual</a> for detailed usage of MetaSTAAR package.
