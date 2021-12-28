@@ -42,8 +42,7 @@
 #' of interest whose combined minor allele frequency is below \code{rare_maf_cutoff}.
 
 MetaSTAAR_merge <- function(chr,start.loc,end.loc,study.names,sample.sizes,sumstat.dir,cov.dir,
-                            rare_maf_cutoff = 0.01,cov_maf_cutoff,
-                            trait,segment.size = 5e5,check_qc_label=FALSE){
+                            rare_maf_cutoff=0.01,cov_maf_cutoff,trait,segment.size=5e5,check_qc_label=FALSE){
 
   segment <- floor((start.loc - 1) / segment.size) + 1
   cov_maf_cutoff[cov_maf_cutoff == 0.5] <- 0.5 + 1e-16

@@ -34,7 +34,7 @@
 #' If a variant in the merged variant list has standard error equal to 0, the p-value will be set as 1.
 
 MetaSTAAR_individual_analysis <- function(chr,start.loc,end.loc,study.names,sample.sizes,sumstat.dir,
-                                          common_mac_cutoff,trait,segment.size = 5e5,check_qc_label=FALSE){
+                                          common_mac_cutoff,trait,segment.size=5e5,check_qc_label=FALSE){
 
   cov_maf_cutoff <- rep(0.5 + 1e-16,length(study.names))
   segment <- floor((start.loc - 1) / segment.size) + 1

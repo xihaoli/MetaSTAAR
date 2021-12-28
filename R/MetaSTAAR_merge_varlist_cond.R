@@ -50,10 +50,8 @@
 #' adjusting for a given list of variants.
 
 MetaSTAAR_merge_varlist_cond <- function(chr,variant_pos,study.names,sample.sizes,sumstat.dir,cov.dir,covcond.dir,
-                                         rare_maf_cutoff = 0.01,cov_maf_cutoff,
-                                         trait,region,segment.size = 5e5,
-                                         effect.cond = c("homogeneous","heterogeneous"),
-                                         check_qc_label=FALSE){
+                                         rare_maf_cutoff=0.01,cov_maf_cutoff,trait,region,segment.size=5e5,
+                                         effect.cond = c("homogeneous","heterogeneous"),check_qc_label=FALSE){
 
   if (length(variant_pos) == 0){
     return(NULL)

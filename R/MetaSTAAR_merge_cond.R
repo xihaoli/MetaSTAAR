@@ -52,10 +52,8 @@
 #' adjusting for a given list of variants.
 
 MetaSTAAR_merge_cond <- function(chr,start.loc,end.loc,study.names,sample.sizes,sumstat.dir,cov.dir,covcond.dir,
-                                 rare_maf_cutoff = 0.01,cov_maf_cutoff,
-                                 trait,region,segment.size = 5e5,
-                                 effect.cond = c("homogeneous","heterogeneous"),
-                                 check_qc_label=FALSE){
+                                 rare_maf_cutoff=0.01,cov_maf_cutoff,trait,region,segment.size=5e5,
+                                 effect.cond = c("homogeneous","heterogeneous"),check_qc_label=FALSE){
 
   effect.cond <- match.arg(effect.cond) # evaluate choices
   segment <- floor((start.loc - 1) / segment.size) + 1

@@ -1,7 +1,11 @@
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+
 # MetaSTAAR (Meta-analysis of variant-Set Test for Association using Annotation infoRmation)
 This is an R package for performing MetaSTAAR procedure in whole-genome sequencing studies.
 ## Description
 MetaSTAAR is an R package for performing Meta-analysis of variant-Set Test for Association using Annotation infoRmation (MetaSTAAR) procedure in whole-genome sequencing (WGS) studies.
+## Workflow Overview
+![MetaSTAAR_workflow](docs/MetaSTAAR_workflow.jpg)
 ## Prerequisites
 <a href="https://www.r-project.org">R</a> (recommended version >= 3.5.1)
 
@@ -16,6 +20,9 @@ devtools::install_github("xihaoli/MetaSTAAR",ref="main")
 ## Usage
 Please see the <a href="docs/MetaSTAAR_manual.pdf">**MetaSTAAR** user manual</a> for detailed usage of MetaSTAAR package.
 ## Version
-The current version is 0.9.6 (December 28, 2021).
+The current version is 0.9.6 (January 6, 2022).
 ## License
 This software is licensed under GPLv3.
+
+![GPLv3](http://www.gnu.org/graphics/gplv3-127x51.png)
+[GNU General Public License, GPLv3](http://www.gnu.org/copyleft/gpl.html)
