@@ -2,7 +2,7 @@
 % Please edit documentation in R/MetaSTAAR.R
 \name{MetaSTAAR}
 \alias{MetaSTAAR}
-\title{Meta-analysis of STAAR procedure using omnibus test}
+\title{Meta-analysis of STAAR (MetaSTAAR) procedure using omnibus test}
 \usage{
 MetaSTAAR(obj_MetaSTAAR_merge, annotation_phred = NULL, rv_num_cutoff = 2)
 }

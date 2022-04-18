@@ -11,4 +11,5 @@ export(MetaSTAAR_worker_sumstat, MetaSTAAR_worker_cov, MetaSTAAR_worker_cov_cond
        MetaSTAAR_merge, MetaSTAAR_merge_cond,
        MetaSTAAR_merge_varlist, MetaSTAAR_merge_varlist_cond,
        MetaSTAAR, MetaSTAAR_cond, MetaSTAAR_individual_analysis,
-       Indiv_Score_Test_Region_meta, Indiv_Score_Test_Region_meta_cond)
+       Indiv_Score_Test_Region_meta, Indiv_Score_Test_Region_meta_cond,
+       Burden_Effect_Size_meta)

@@ -1,4 +1,4 @@
-#' Meta-analysis of STAAR procedure for conditional analysis using omnibus test
+#' Meta-analysis of STAAR (MetaSTAAR) procedure for conditional analysis using omnibus test
 #'
 #' The \code{MetaSTAAR_cond} function takes in the object from the merged conditional summary statistics
 #' and covariance files of each individual study and functional annotation data

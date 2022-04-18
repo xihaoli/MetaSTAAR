@@ -2,7 +2,7 @@
 % Please edit documentation in R/MetaSTAAR_cond.R
 \name{MetaSTAAR_cond}
 \alias{MetaSTAAR_cond}
-\title{Meta-analysis of STAAR procedure for conditional analysis using omnibus test}
+\title{Meta-analysis of STAAR (MetaSTAAR) procedure for conditional analysis using omnibus test}
 \usage{
 MetaSTAAR_cond(
   obj_MetaSTAAR_merge_cond,

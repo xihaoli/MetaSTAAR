@@ -1,4 +1,4 @@
-#' Meta-analysis of STAAR procedure using omnibus test
+#' Meta-analysis of STAAR (MetaSTAAR) procedure using omnibus test
 #'
 #' The \code{MetaSTAAR} function takes in the object from the merged summary statistics
 #' and covariance files of each individual study and functional annotation data
