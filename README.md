@@ -23,7 +23,7 @@ devtools::install_github("xihaoli/MetaSTAAR",ref="main")
 ## Usage
 Please see the <a href="docs/MetaSTAAR_manual.pdf">**MetaSTAAR** user manual</a> for detailed usage of MetaSTAAR package.
 ## Version
-The current version is 0.9.6 (April 20, 2022).
+The current version is 0.9.6 (August 3, 2022).
 ## License
 This software is licensed under GPLv3.
 

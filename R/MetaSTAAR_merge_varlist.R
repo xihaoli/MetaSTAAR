@@ -295,7 +295,7 @@ MetaSTAAR_merge_varlist <- function(chr,variant_pos,study.names,sample.sizes,sum
     results.list <- lapply(variant_pos.list,function(x) {
       MetaSTAAR_merge_varlist(chr,x,study.names,sample.sizes,sumstat.dir,cov.dir,
                               rare_maf_cutoff,cov_maf_cutoff,
-                              trait,segment.size)
+                              trait,segment.size,check_qc_label)
     })
     results.info.list <- lapply(results.list,function(x) {x$info})
     results.info.merge <- do.call("rbind",results.info.list)
