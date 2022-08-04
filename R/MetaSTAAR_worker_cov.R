@@ -29,7 +29,7 @@
 MetaSTAAR_worker_cov <- function(genotype,obj_nullmodel,cov_maf_cutoff,
                                  variant_pos,region_midpos,qc_label=NULL,segment.size=5e5,signif.digits=3){
 
-  if(class(genotype) != "matrix" && !(!is.null(attr(class(genotype), "package")) && attr(class(genotype), "package") == "Matrix")){
+  if(class(genotype)[1] != "matrix" && !(!is.null(attr(class(genotype), "package")) && attr(class(genotype), "package") == "Matrix")){
     stop("genotype is not a matrix!")
   }
 

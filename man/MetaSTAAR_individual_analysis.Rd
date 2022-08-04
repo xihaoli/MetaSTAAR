@@ -42,7 +42,7 @@ the meta-analysis.}
 
 \item{segment.size}{a numeric value indicating the length of each segment of which
 the summary statistics and sparse weighted covariance files are stored.
-Note that the input value should be aligned with the inpue values of
+Note that the input value should be aligned with the input values of
 \code{\link{MetaSTAAR_worker_cov}} (default = 5e+05).}
 
 \item{check_qc_label}{a logical value indicating whether variants need to be dropped according to \code{qc_label}

@@ -21,7 +21,7 @@
 
 MetaSTAAR_worker_sumstat <- function(genotype,obj_nullmodel,variant_info,qc_label=NULL){
 
-  if(class(genotype) != "matrix" && !(!is.null(attr(class(genotype), "package")) && attr(class(genotype), "package") == "Matrix")){
+  if(class(genotype)[1] != "matrix" && !(!is.null(attr(class(genotype), "package")) && attr(class(genotype), "package") == "Matrix")){
     stop("genotype is not a matrix!")
   }
 

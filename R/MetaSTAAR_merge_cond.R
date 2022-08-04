@@ -31,7 +31,7 @@
 #' of variants adjusted for conditional analysis of the meta-analysis.
 #' @param segment.size a numeric value indicating the length of each segment of which
 #' the summary statistics and sparse weighted covariance files are stored.
-#' Note that the input value should be aligned with the inpue values of
+#' Note that the input value should be aligned with the input values of
 #' \code{\link{MetaSTAAR_worker_cov}} (default = 5e+05).
 #' @param effect.cond a character value indicating the effects of variants to be adjusted for
 #' in conditional analysis is \code{homogeneous} or \code{heterogeneous}. (Default is \code{homogeneous}).

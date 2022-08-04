@@ -34,7 +34,7 @@
 
 MetaSTAAR_worker_cov_cond <- function(genotype,genotype_adj,obj_nullmodel,variant_info,variant_adj_info){
 
-  if(class(genotype) != "matrix" && !(!is.null(attr(class(genotype), "package")) && attr(class(genotype), "package") == "Matrix")){
+  if(class(genotype)[1] != "matrix" && !(!is.null(attr(class(genotype), "package")) && attr(class(genotype), "package") == "Matrix")){
     stop("genotype is not a matrix!")
   }
 
@@ -42,7 +42,7 @@ MetaSTAAR_worker_cov_cond <- function(genotype,genotype_adj,obj_nullmodel,varian
     stop(paste0("Dimensions don't match for genotype and variant_info!"))
   }
 
-  if(class(genotype_adj) == "numeric" || class(genotype_adj) == "integer"){
+  if(class(genotype_adj)[1] == "numeric" || class(genotype_adj)[1] == "integer"){
     genotype_adj <- matrix(genotype_adj, ncol=1)
   }
 
