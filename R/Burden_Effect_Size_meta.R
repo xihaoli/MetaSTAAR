@@ -1,10 +1,10 @@
 #' Effect size and standard error estimates of meta-analysis of burden test for a given variant-set
 #'
 #' The \code{Burden_Effect_Size_meta} function takes in the object from the merged summary statistics
-#' and covariance files of each individual study and functional annotation data
+#' and covariance files of each participating study and functional annotation data
 #' to calculate the effect size and standard error estimates of meta-analysis of burden test for a given variant-set.
 #' @param obj_MetaSTAAR_merge an object from merging the summary statistics
-#' and covariance files from each individual study, which is the output from
+#' and covariance files from each participating study, which is the output from
 #' \code{\link{MetaSTAAR_merge}}.
 #' @param rv_num_cutoff the cutoff of minimum number of variants of analyzing
 #' a given variant-set (default = 2).

@@ -24,7 +24,7 @@ with p rows (listed in the same order as the columns of \code{genotype}) and sho
 the following 4 columns: chromosome (chr), position (pos), reference allele (ref), and alternative allele (alt).}
 
 \item{qc_label}{a vector of quality control status for each variant in \code{variant_info}, where a pass variant
-is labeled as "PASS". If \code{qc_label} is NULL, it is assumed that all variants are pass variants in the study (Default = NULL).}
+is labeled as "PASS". If \code{qc_label} is NULL, it is assumed that all variants are pass variants in the study (default = NULL).}
 }
 \value{
 \code{sumstat}: the data frame of all variants in the variant-set (the summary statistics file),

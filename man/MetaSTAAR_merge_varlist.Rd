@@ -24,8 +24,8 @@ MetaSTAAR_merge_varlist(
 \item{variant_pos}{a numeric vector indicating all possible positions of the variants to be included
 in the variant-set.}
 
-\item{study.names}{a character vector containing the name of each individual
-study contributing to the meta-analysis.}
+\item{study.names}{a character vector containing the name of each participating
+study in the meta-analysis.}
 
 \item{sample.sizes}{a numeric vector with the length of \code{study.names}
 indicating the sample size of each study.}
@@ -52,7 +52,7 @@ Note that the input value should be aligned with the input values of
 
 \item{check_qc_label}{a logical value indicating whether variants need to be dropped according to \code{qc_label}
 specified in \code{\link{MetaSTAAR_worker_sumstat}} and \code{\link{MetaSTAAR_worker_cov}}.
-If \code{check_qc_label} is FALSE, it is assumed that no variant will be dropped (Default = FALSE).}
+If \code{check_qc_label} is FALSE, it is assumed that no variant will be dropped (default = FALSE).}
 }
 \value{
 a list with the following members:
@@ -72,6 +72,6 @@ of interest whose combined minor allele frequency is below \code{rare_maf_cutoff
 \description{
 The \code{MetaSTAAR_merge_varlist} function takes in the summary statistics file and the sparse weighted
 covariance file (the output from \code{\link{MetaSTAAR_worker_sumstat}} and \code{\link{MetaSTAAR_worker_cov}})
-from each individual study and performs the preliminary data manipulation step
+from each participating study and performs the preliminary data manipulation step
 by merging them into a single unified summary statistics file and a covariance file, respectively.
 }

@@ -8,7 +8,7 @@ Indiv_Score_Test_Region_meta_cond(obj_MetaSTAAR_merge_cond, rv_num_cutoff = 2)
 }
 \arguments{
 \item{obj_MetaSTAAR_merge_cond}{an object from merging the conditional summary statistics
-and covariance files from each individual study, adjusting for a given list of variants,
+and covariance files from each participating study, adjusting for a given list of variants,
 which is the output from \code{\link{MetaSTAAR_merge_cond}}.}
 
 \item{rv_num_cutoff}{the cutoff of minimum number of variants of analyzing
@@ -23,7 +23,7 @@ the given variant-set has standard error equal to 0, the p-value will be set as 
 }
 \description{
 The \code{Indiv_Score_Test_Region_meta_cond} function takes in the object from the
-merged conditional summary statistics and covariance files of each individual study to analyze
+merged conditional summary statistics and covariance files of each participating study to analyze
 the conditional associations between a quantitative/dichotomous phenotype and
 all individual variants in a given variant-set by using the meta-analysis of score test,
 adjusting for a given list of variants.

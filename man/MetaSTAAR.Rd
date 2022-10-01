@@ -8,7 +8,7 @@ MetaSTAAR(obj_MetaSTAAR_merge, annotation_phred = NULL, rv_num_cutoff = 2)
 }
 \arguments{
 \item{obj_MetaSTAAR_merge}{an object from merging the summary statistics
-and covariance files from each individual study, which is the output from
+and covariance files from each participating study, which is the output from
 \code{\link{MetaSTAAR_merge}}.}
 
 \item{annotation_phred}{a data frame or matrix of functional annotation data

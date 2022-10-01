@@ -1,11 +1,11 @@
 #' Meta-analysis of score test for individual variants in a given variant-set
 #'
 #' The \code{Indiv_Score_Test_Region_meta} function takes in the object from the
-#' merged summary statistics and covariance files of each individual study
+#' merged summary statistics and covariance files of each participating study
 #' to analyze the associations between a quantitative/dichotomous phenotype and
 #' all individual variants in a given variant-set by using the meta-analysis of score test.
 #' @param obj_MetaSTAAR_merge an object from merging the summary statistics
-#' and covariance files from each individual study, which is the output from
+#' and covariance files from each participating study, which is the output from
 #' \code{\link{MetaSTAAR_merge}}.
 #' @param rv_num_cutoff the cutoff of minimum number of variants of analyzing
 #' a given variant-set (default = 2).

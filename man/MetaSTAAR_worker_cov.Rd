@@ -35,7 +35,7 @@ of \code{genotype}) indicating the position of the variants in the variant-set.}
 by which the shorter edge of the rectangle is defined.}
 
 \item{qc_label}{a vector of quality control status for each variant in \code{variant_pos}, where a pass variant
-is labeled as "PASS". If \code{qc_label} is NULL, it is assumed that all variants are pass variants in the study (Default = NULL).}
+is labeled as "PASS". If \code{qc_label} is NULL, it is assumed that all variants are pass variants in the study (default = NULL).}
 
 \item{segment.size}{a numeric value indicating the length of each segment of which
 the sparse weighted covariance file is stored (default = 5e+05).}

@@ -3,7 +3,7 @@
 #' The \code{MetaSTAAR_merge_cond} function takes in the summary statistics file and the sparse weighted
 #' covariance file (the output from \code{\link{MetaSTAAR_worker_sumstat}} and \code{\link{MetaSTAAR_worker_cov}})
 #' as well as the covariance file for conditional analysis (the output from \code{\link{MetaSTAAR_worker_cov_cond}})
-#' from each individual study and performs the preliminary data manipulation step
+#' from each participating study and performs the preliminary data manipulation step
 #' by merging them into a single unified conditional summary statistics
 #' file and a conditional covariance file, respectively, adjusting for a given list of variants.
 #' @param chr a numeric value indicating the chromosome of the genetic region of interest.
@@ -11,8 +11,8 @@
 #' genetic region of interest.
 #' @param end.loc a numeric value indicating the ending location (position) of the
 #' genetic region of interest.
-#' @param study.names a character vector containing the name of each individual
-#' study contributing to the meta-analysis.
+#' @param study.names a character vector containing the name of each participating
+#' study in the meta-analysis.
 #' @param sample.sizes a numeric vector with the length of \code{study.names}
 #' indicating the sample size of each study.
 #' @param sumstat.dir a character vector containing the directories of the study-specific summary statistics file folders.
@@ -34,10 +34,10 @@
 #' Note that the input value should be aligned with the input values of
 #' \code{\link{MetaSTAAR_worker_cov}} (default = 5e+05).
 #' @param effect.cond a character value indicating the effects of variants to be adjusted for
-#' in conditional analysis is \code{homogeneous} or \code{heterogeneous}. (Default is \code{homogeneous}).
+#' in conditional analysis are "homogeneous" or "heterogeneous" (default = "homogeneous").
 #' @param check_qc_label a logical value indicating whether variants need to be dropped according to \code{qc_label}
 #' specified in \code{\link{MetaSTAAR_worker_sumstat}} and \code{\link{MetaSTAAR_worker_cov}}.
-#' If \code{check_qc_label} is FALSE, it is assumed that no variant will be dropped (Default = FALSE).
+#' If \code{check_qc_label} is FALSE, it is assumed that no variant will be dropped (default = FALSE).
 #' @return a list with the following members:
 #' @return \code{info}: the merged data frame of all variants in the genetic region
 #' of interest whose combined minor allele frequency is below \code{rare_maf_cutoff}, including the

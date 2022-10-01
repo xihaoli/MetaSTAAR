@@ -12,7 +12,7 @@ MetaSTAAR_cond(
 }
 \arguments{
 \item{obj_MetaSTAAR_merge_cond}{an object from merging the conditional summary statistics
-and covariance files from each individual study, adjusting for a given list of variants,
+and covariance files from each participating study, adjusting for a given list of variants,
 which is the output from \code{\link{MetaSTAAR_merge_cond}}.}
 
 \item{annotation_phred}{a data frame or matrix of functional annotation data
@@ -77,7 +77,7 @@ p-value by aggregating these p-values using Cauchy method.
 }
 \description{
 The \code{MetaSTAAR_cond} function takes in the object from the merged conditional summary statistics
-and covariance files of each individual study and functional annotation data
+and covariance files of each participating study and functional annotation data
 to analyze the conditional association between a quantitative/dichotomous phenotype and
 a variant-set by using the meta-analysis of STAAR (MetaSTAAR) procedure,
 adjusting for a given list of variants.

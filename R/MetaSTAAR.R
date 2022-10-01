@@ -8,7 +8,7 @@
 #' that aggregated SKAT-MS(1,25), SKAT-MS(1,1), Burden-MS(1,25), Burden-MS(1,1), ACAT-V-MS(1,25),
 #' and ACAT-V-MS(1,1) together with p-values of each test weighted by each annotation using Cauchy method.
 #' @param obj_MetaSTAAR_merge an object from merging the summary statistics
-#' and covariance files from each individual study, which is the output from
+#' and covariance files from each participating study, which is the output from
 #' \code{\link{MetaSTAAR_merge}}.
 #' @param annotation_phred a data frame or matrix of functional annotation data
 #' of dimension p*q (or a vector of a single annotation score with length p),

@@ -1,16 +1,16 @@
 #' Meta-analysis of individual variants using \code{MetaSTAAR}
 #'
 #' The \code{MetaSTAAR_individual_analysis} function takes in the summary statistics file
-#' from each individual study (the output from \code{\link{MetaSTAAR_worker_sumstat}})
+#' from each participating study (the output from \code{\link{MetaSTAAR_worker_sumstat}})
 #' to analyze the associations between a quantitative/dichotomous phenotype and
-#' all individual variants in the merged variant list by using the meta-analysis
+#' all individual variants in the merged variant list by using the meta-analysis of score test.
 #' @param chr a numeric value indicating the chromosome of the genetic region of interest.
 #' @param start.loc a numeric value indicating the starting location (position) of the
 #' genetic region of interest.
 #' @param end.loc a numeric value indicating the ending location (position) of the
 #' genetic region of interest.
-#' @param study.names a character vector containing the name of each individual
-#' study contributing to the meta-analysis.
+#' @param study.names a character vector containing the name of each participating
+#' study in the meta-analysis.
 #' @param sample.sizes a numeric vector with the length of \code{study.names}
 #' indicating the sample size of each study.
 #' @param sumstat.dir a character vector containing the directories of the study-specific summary statistics file folders.
@@ -24,7 +24,7 @@
 #' \code{\link{MetaSTAAR_worker_cov}} (default = 5e+05).
 #' @param check_qc_label a logical value indicating whether variants need to be dropped according to \code{qc_label}
 #' specified in \code{\link{MetaSTAAR_worker_sumstat}} and \code{\link{MetaSTAAR_worker_cov}}.
-#' If \code{check_qc_label} is FALSE, it is assumed that no variant will be dropped (Default = FALSE).
+#' If \code{check_qc_label} is FALSE, it is assumed that no variant will be dropped (default = FALSE).
 #' @return a data frame with p rows corresponding to the p genetic variants in the merged variant list
 #' and the following columns: chromosome (chr), position (pos), reference allele (ref), alternative allele (alt),
 #' combined alternative allele count (alt_AC), combined minor allele count (MAC), combined minor allele frequency (MAF),
@@ -223,7 +223,7 @@ MetaSTAAR_individual_analysis <- function(chr,start.loc,end.loc,study.names,samp
 
   U.merge <- Reduce("+", lapply(sumstat.merge.list, function(x) {
     x <- x[cv.index,]
-    return(x$U)
+    return(x$U * (2 * (x$alt_AC == x$MAC) - 1))
   }))
 
   V.merge <- Reduce("+", lapply(sumstat.merge.list, function(x) {

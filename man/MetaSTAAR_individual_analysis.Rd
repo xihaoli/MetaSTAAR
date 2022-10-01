@@ -26,8 +26,8 @@ genetic region of interest.}
 \item{end.loc}{a numeric value indicating the ending location (position) of the
 genetic region of interest.}
 
-\item{study.names}{a character vector containing the name of each individual
-study contributing to the meta-analysis.}
+\item{study.names}{a character vector containing the name of each participating
+study in the meta-analysis.}
 
 \item{sample.sizes}{a numeric vector with the length of \code{study.names}
 indicating the sample size of each study.}
@@ -47,7 +47,7 @@ Note that the input value should be aligned with the input values of
 
 \item{check_qc_label}{a logical value indicating whether variants need to be dropped according to \code{qc_label}
 specified in \code{\link{MetaSTAAR_worker_sumstat}} and \code{\link{MetaSTAAR_worker_cov}}.
-If \code{check_qc_label} is FALSE, it is assumed that no variant will be dropped (Default = FALSE).}
+If \code{check_qc_label} is FALSE, it is assumed that no variant will be dropped (default = FALSE).}
 }
 \value{
 a data frame with p rows corresponding to the p genetic variants in the merged variant list
@@ -60,7 +60,7 @@ If a variant in the merged variant list has standard error equal to 0, the p-val
 }
 \description{
 The \code{MetaSTAAR_individual_analysis} function takes in the summary statistics file
-from each individual study (the output from \code{\link{MetaSTAAR_worker_sumstat}})
+from each participating study (the output from \code{\link{MetaSTAAR_worker_sumstat}})
 to analyze the associations between a quantitative/dichotomous phenotype and
-all individual variants in the merged variant list by using the meta-analysis
+all individual variants in the merged variant list by using the meta-analysis of score test.
 }

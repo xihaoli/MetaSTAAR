@@ -8,7 +8,7 @@ Burden_Effect_Size_meta(obj_MetaSTAAR_merge, rv_num_cutoff = 2)
 }
 \arguments{
 \item{obj_MetaSTAAR_merge}{an object from merging the summary statistics
-and covariance files from each individual study, which is the output from
+and covariance files from each participating study, which is the output from
 \code{\link{MetaSTAAR_merge}}.}
 
 \item{rv_num_cutoff}{the cutoff of minimum number of variants of analyzing
@@ -36,7 +36,7 @@ combined minor allele frequency > 0 and less than \code{rare_maf_cutoff} in the 
 }
 \description{
 The \code{Burden_Effect_Size_meta} function takes in the object from the merged summary statistics
-and covariance files of each individual study and functional annotation data
+and covariance files of each participating study and functional annotation data
 to calculate the effect size and standard error estimates of meta-analysis of burden test for a given variant-set.
 }
 \references{

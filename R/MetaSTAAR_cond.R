@@ -1,7 +1,7 @@
 #' Meta-analysis of STAAR (MetaSTAAR) procedure for conditional analysis using omnibus test
 #'
 #' The \code{MetaSTAAR_cond} function takes in the object from the merged conditional summary statistics
-#' and covariance files of each individual study and functional annotation data
+#' and covariance files of each participating study and functional annotation data
 #' to analyze the conditional association between a quantitative/dichotomous phenotype and
 #' a variant-set by using the meta-analysis of STAAR (MetaSTAAR) procedure,
 #' adjusting for a given list of variants.
@@ -9,7 +9,7 @@
 #' conditional SKAT-MS(1,25), SKAT-MS(1,1), Burden-MS(1,25), Burden-MS(1,1), ACAT-V-MS(1,25), and ACAT-V-MS(1,1)
 #' together with conditional p-values of each test weighted by each annotation using Cauchy method.
 #' @param obj_MetaSTAAR_merge_cond an object from merging the conditional summary statistics
-#' and covariance files from each individual study, adjusting for a given list of variants,
+#' and covariance files from each participating study, adjusting for a given list of variants,
 #' which is the output from \code{\link{MetaSTAAR_merge_cond}}.
 #' @param annotation_phred a data frame or matrix of functional annotation data
 #' of dimension p*q (or a vector of a single annotation score with length p),
