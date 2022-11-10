@@ -4,7 +4,7 @@ name: R-CMD-check
 
 jobs:
   R-CMD-check:
-    runs-on: macOS-latest
+    runs-on: {os: macOS-latest, r: '4.2.1'}
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     steps:
