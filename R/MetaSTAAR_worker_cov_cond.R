@@ -1,4 +1,4 @@
-#' Generating covariance file for conditional analysis using MetaSTAAR_worker
+#' Generating covariance file for conditional analysis using MetaSTAARWorker
 #'
 #' The \code{MetaSTAAR_worker_cov_cond} function takes in genotype, the genotype
 #' of variants to be adjusted for in conditional analysis, the object

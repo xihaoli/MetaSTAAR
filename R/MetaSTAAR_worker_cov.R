@@ -1,4 +1,4 @@
-#' Generating sparse weighted covariance file using MetaSTAAR_worker
+#' Generating sparse weighted covariance file using MetaSTAARWorker
 #'
 #' The \code{MetaSTAAR_worker_cov} function takes in genotype, the object
 #' from fitting the null model, and variant position to generate the sparse weighted

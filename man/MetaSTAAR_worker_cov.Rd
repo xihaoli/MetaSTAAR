@@ -2,7 +2,7 @@
 % Please edit documentation in R/MetaSTAAR_worker_cov.R
 \name{MetaSTAAR_worker_cov}
 \alias{MetaSTAAR_worker_cov}
-\title{Generating sparse weighted covariance file using MetaSTAAR_worker}
+\title{Generating sparse weighted covariance file using MetaSTAARWorker}
 \usage{
 MetaSTAAR_worker_cov(
   genotype,

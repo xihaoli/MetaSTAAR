@@ -1,4 +1,4 @@
-#' Generating summary statistics file using MetaSTAAR_worker
+#' Generating summary statistics file using MetaSTAARWorker
 #'
 #' The \code{MetaSTAAR_worker_sumstat} function takes in genotype, the object
 #' from fitting the null model, and variant information (unique identifier)

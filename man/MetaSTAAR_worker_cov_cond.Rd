@@ -2,7 +2,7 @@
 % Please edit documentation in R/MetaSTAAR_worker_cov_cond.R
 \name{MetaSTAAR_worker_cov_cond}
 \alias{MetaSTAAR_worker_cov_cond}
-\title{Generating covariance file for conditional analysis using MetaSTAAR_worker}
+\title{Generating covariance file for conditional analysis using MetaSTAARWorker}
 \usage{
 MetaSTAAR_worker_cov_cond(
   genotype,

@@ -2,7 +2,7 @@
 % Please edit documentation in R/MetaSTAAR_worker_sumstat.R
 \name{MetaSTAAR_worker_sumstat}
 \alias{MetaSTAAR_worker_sumstat}
-\title{Generating summary statistics file using MetaSTAAR_worker}
+\title{Generating summary statistics file using MetaSTAARWorker}
 \usage{
 MetaSTAAR_worker_sumstat(
   genotype,
