@@ -31,6 +31,11 @@
 #' @return \code{variant_adj_info}: the data frame or matrix of adjusted variant information (unique identifier)
 #' with p_adj rows (listed in the same order as the columns of \code{GTPG_cond}) and 4 columns: chromosome (chr),
 #' position (pos), reference allele (ref), alternative allele (alt), score statistic (U), and variance (V).
+#' @references Li, X., et al. (2022). Powerful, scalable and resource-efficient
+#' meta-analysis of rare variant associations in large whole genome sequencing studies.
+#' \emph{Nature Genetics}.
+#' (\href{https://doi.org/10.1038/s41588-022-01225-6}{pub})
+#' @export
 
 MetaSTAAR_worker_cov_cond <- function(genotype,genotype_adj,obj_nullmodel,variant_info,variant_adj_info){
 

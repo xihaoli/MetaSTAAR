@@ -18,6 +18,11 @@
 #' alternative allele (alt), quality control status (qc_label, optional), alternative allele count (alt_AC), minor allele count (MAC),
 #' minor allele frequency (MAF), study sample size (N), score statistic (U), variance (V), and
 #' the (low-rank decomposed) dense component of the covariance file.
+#' @references Li, X., et al. (2022). Powerful, scalable and resource-efficient
+#' meta-analysis of rare variant associations in large whole genome sequencing studies.
+#' \emph{Nature Genetics}.
+#' (\href{https://doi.org/10.1038/s41588-022-01225-6}{pub})
+#' @export
 
 MetaSTAAR_worker_sumstat <- function(genotype,obj_nullmodel,variant_info,qc_label=NULL){
 

@@ -40,13 +40,8 @@ and covariance files of each participating study and functional annotation data
 to calculate the effect size and standard error estimates of meta-analysis of burden test for a given variant-set.
 }
 \references{
-Li, X., Li, Z., et al. (2020). Dynamic incorporation of multiple
-in silico functional annotations empowers rare variant association analysis of
-large whole-genome sequencing studies at scale. \emph{Nature Genetics 52}(9), 969-983.
-(\href{https://www.nature.com/articles/s41588-020-0676-4}{pub})
-
-Liu, Y., et al. (2019). Acat: A fast and powerful p value combination
-method for rare-variant analysis in sequencing studies.
-\emph{The American Journal of Human Genetics 104}(3), 410-421.
-(\href{https://www.sciencedirect.com/science/article/pii/S0002929719300023}{pub})
+Li, X., et al. (2022). Powerful, scalable and resource-efficient
+meta-analysis of rare variant associations in large whole genome sequencing studies.
+\emph{Nature Genetics}.
+(\href{https://doi.org/10.1038/s41588-022-01225-6}{pub})
 }

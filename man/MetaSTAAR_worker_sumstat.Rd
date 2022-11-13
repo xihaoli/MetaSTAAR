@@ -38,3 +38,9 @@ The \code{MetaSTAAR_worker_sumstat} function takes in genotype, the object
 from fitting the null model, and variant information (unique identifier)
 to generate the summary statistics file for the given variant-set.
 }
+\references{
+Li, X., et al. (2022). Powerful, scalable and resource-efficient
+meta-analysis of rare variant associations in large whole genome sequencing studies.
+\emph{Nature Genetics}.
+(\href{https://doi.org/10.1038/s41588-022-01225-6}{pub})
+}

@@ -40,6 +40,11 @@
 #' of interest whose combined minor allele frequency is below \code{rare_maf_cutoff}.
 #' @return \code{cov} the merged covariance matrix of all variants in the genetic region
 #' of interest whose combined minor allele frequency is below \code{rare_maf_cutoff}.
+#' @references Li, X., et al. (2022). Powerful, scalable and resource-efficient
+#' meta-analysis of rare variant associations in large whole genome sequencing studies.
+#' \emph{Nature Genetics}.
+#' (\href{https://doi.org/10.1038/s41588-022-01225-6}{pub})
+#' @export
 
 MetaSTAAR_merge <- function(chr,start.loc,end.loc,study.names,sample.sizes,sumstat.dir,cov.dir,
                             rare_maf_cutoff=0.01,cov_maf_cutoff,trait,segment.size=5e5,check_qc_label=FALSE){

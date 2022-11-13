@@ -32,6 +32,11 @@
 #' the standard error associated with the score test statistic (Score_SE), the estimated effect size of the minor allele (Est),
 #' the standard error associated with the estimated effect size (Est_se).
 #' If a variant in the merged variant list has standard error equal to 0, the p-value will be set as 1.
+#' @references Li, X., et al. (2022). Powerful, scalable and resource-efficient
+#' meta-analysis of rare variant associations in large whole genome sequencing studies.
+#' \emph{Nature Genetics}.
+#' (\href{https://doi.org/10.1038/s41588-022-01225-6}{pub})
+#' @export
 
 MetaSTAAR_individual_analysis <- function(chr,start.loc,end.loc,study.names,sample.sizes,sumstat.dir,
                                           common_mac_cutoff,trait,segment.size=5e5,check_qc_label=FALSE){

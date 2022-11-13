@@ -75,3 +75,9 @@ covariance file (the output from \code{\link{MetaSTAAR_worker_sumstat}} and \cod
 from each participating study and performs the preliminary data manipulation step
 by merging them into a single unified summary statistics file and a covariance file, respectively.
 }
+\references{
+Li, X., et al. (2022). Powerful, scalable and resource-efficient
+meta-analysis of rare variant associations in large whole genome sequencing studies.
+\emph{Nature Genetics}.
+(\href{https://doi.org/10.1038/s41588-022-01225-6}{pub})
+}

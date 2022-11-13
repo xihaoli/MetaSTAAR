@@ -48,6 +48,11 @@
 #' @return \code{cov_cond}: the merged conditional covariance matrix of all variants in the given variant position list
 #' of interest whose combined minor allele frequency is below \code{rare_maf_cutoff},
 #' adjusting for a given list of variants.
+#' @references Li, X., et al. (2022). Powerful, scalable and resource-efficient
+#' meta-analysis of rare variant associations in large whole genome sequencing studies.
+#' \emph{Nature Genetics}.
+#' (\href{https://doi.org/10.1038/s41588-022-01225-6}{pub})
+#' @export
 
 MetaSTAAR_merge_varlist_cond <- function(chr,variant_pos,study.names,sample.sizes,sumstat.dir,cov.dir,covcond.dir,
                                          rare_maf_cutoff=0.01,cov_maf_cutoff,trait,region,segment.size=5e5,

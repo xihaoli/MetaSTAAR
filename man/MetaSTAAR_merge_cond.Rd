@@ -95,3 +95,9 @@ from each participating study and performs the preliminary data manipulation ste
 by merging them into a single unified conditional summary statistics
 file and a conditional covariance file, respectively, adjusting for a given list of variants.
 }
+\references{
+Li, X., et al. (2022). Powerful, scalable and resource-efficient
+meta-analysis of rare variant associations in large whole genome sequencing studies.
+\emph{Nature Genetics}.
+(\href{https://doi.org/10.1038/s41588-022-01225-6}{pub})
+}

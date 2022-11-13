@@ -19,14 +19,10 @@
 #' @return \code{Burden_pvalue}: the Burden-MS(1,1) p-value for the given variant-set.
 #' @return \code{Burden_Est}: the effect size estimate of Burden-MS(1,1) for the given variant-set.
 #' @return \code{Burden_SE_Est}: the standard error estimate of \code{Burden_Est} for the given variant-set.
-#' @references Li, X., Li, Z., et al. (2020). Dynamic incorporation of multiple
-#' in silico functional annotations empowers rare variant association analysis of
-#' large whole-genome sequencing studies at scale. \emph{Nature Genetics 52}(9), 969-983.
-#' (\href{https://www.nature.com/articles/s41588-020-0676-4}{pub})
-#' @references Liu, Y., et al. (2019). Acat: A fast and powerful p value combination
-#' method for rare-variant analysis in sequencing studies.
-#' \emph{The American Journal of Human Genetics 104}(3), 410-421.
-#' (\href{https://www.sciencedirect.com/science/article/pii/S0002929719300023}{pub})
+#' @references Li, X., et al. (2022). Powerful, scalable and resource-efficient
+#' meta-analysis of rare variant associations in large whole genome sequencing studies.
+#' \emph{Nature Genetics}.
+#' (\href{https://doi.org/10.1038/s41588-022-01225-6}{pub})
 #' @export
 
 Burden_Effect_Size_meta <- function(obj_MetaSTAAR_merge,rv_num_cutoff=2){

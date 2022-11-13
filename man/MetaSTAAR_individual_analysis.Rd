@@ -64,3 +64,9 @@ from each participating study (the output from \code{\link{MetaSTAAR_worker_sums
 to analyze the associations between a quantitative/dichotomous phenotype and
 all individual variants in the merged variant list by using the meta-analysis of score test.
 }
+\references{
+Li, X., et al. (2022). Powerful, scalable and resource-efficient
+meta-analysis of rare variant associations in large whole genome sequencing studies.
+\emph{Nature Genetics}.
+(\href{https://doi.org/10.1038/s41588-022-01225-6}{pub})
+}
