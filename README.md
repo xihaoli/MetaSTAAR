@@ -6,7 +6,7 @@
 # MetaSTAAR (Meta-analysis of variant-Set Test for Association using Annotation infoRmation)
 This is an R package for performing MetaSTAAR procedure in whole-genome sequencing studies.
 ## Description
-MetaSTAAR is an R package for performing Meta-analysis of variant-Set Test for Association using Annotation infoRmation (MetaSTAAR) procedure in whole-genome sequencing (WGS) studies.
+MetaSTAAR is an R package for performing Meta-analysis of variant-Set Test for Association using Annotation infoRmation (MetaSTAAR) procedure in whole-genome sequencing (WGS) studies. MetaSTAAR enables functionally-informed rare variant meta-analysis of large WGS studies using an efficient, sparse matrix approach for storing summary statistic, while protecting data privacy of study participants and avoiding sharing subject-level data. MetaSTAAR accounts for relatedness and population structure of continuous and dichotomous traits, and boosts the power of rare variant meta-analysis by incorporating multiple variant functional annotations.
 ## Workflow Overview
 ![MetaSTAAR_workflow](docs/MetaSTAAR_workflow.jpg)
 ## Prerequisites
