@@ -8,7 +8,7 @@ This is an R package for performing MetaSTAAR procedure in whole-genome sequenci
 ## Description
 MetaSTAAR is an R package for performing Meta-analysis of variant-Set Test for Association using Annotation infoRmation (MetaSTAAR) procedure in whole-genome sequencing (WGS) studies.
 ## Workflow Overview
-![MetaSTAAR_workflow](docs/MetaSTAAR_workflow.png)
+![MetaSTAAR_workflow](docs/MetaSTAAR_workflow.jpg)
 ## Prerequisites
 <a href="https://www.r-project.org">R</a> (recommended version >= 3.5.1)
 
