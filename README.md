@@ -23,7 +23,7 @@ devtools::install_github("xihaoli/MetaSTAAR",ref="main")
 ## Usage
 Please see the <a href="docs/MetaSTAAR_manual.pdf">**MetaSTAAR** user manual</a> for detailed usage of MetaSTAAR package. The scripts used to generate results in the <a href="https://doi.org/10.1038/s41588-022-01225-6">manuscript</a> are available on <a href="https://doi.org/10.5281/zenodo.6668274">_Zenodo_</a>.
 ## Data Availability
-The whole-genome individual functional annotation data assembled from a variety of sources and the computed annotation principal components are available at the [Functional Annotation of Variant - Online Resource (FAVOR)](https://favor.genohub.org) site and [FAVOR Essential Database](https://doi.org/10.7910/DVN/1VGTJI).
+The whole-genome functional annotation data assembled from a variety of sources and the precomputed annotation principal components are available at the [Functional Annotation of Variant - Online Resource (FAVOR)](https://favor.genohub.org) site and [FAVOR Essential Database](https://doi.org/10.7910/DVN/1VGTJI).
 ## Version
 The current version is 0.9.6.1 (December 23, 2022).
 ## Citation
