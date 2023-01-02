@@ -57,8 +57,8 @@ to generate the conditional covariance file for the given variant-set,
 adjusting for a given list of variants.
 }
 \references{
-Li, X., et al. (2022). Powerful, scalable and resource-efficient
+Li, X., et al. (2023). Powerful, scalable and resource-efficient
 meta-analysis of rare variant associations in large whole genome sequencing studies.
-\emph{Nature Genetics}.
+\emph{Nature Genetics}, \emph{55}(1), 154-164.
 (\href{https://doi.org/10.1038/s41588-022-01225-6}{pub})
 }

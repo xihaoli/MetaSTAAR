@@ -40,9 +40,9 @@
 #' of interest whose combined minor allele frequency is below \code{rare_maf_cutoff}.
 #' @return \code{cov} the merged covariance matrix of all variants in the genetic region
 #' of interest whose combined minor allele frequency is below \code{rare_maf_cutoff}.
-#' @references Li, X., et al. (2022). Powerful, scalable and resource-efficient
+#' @references Li, X., et al. (2023). Powerful, scalable and resource-efficient
 #' meta-analysis of rare variant associations in large whole genome sequencing studies.
-#' \emph{Nature Genetics}.
+#' \emph{Nature Genetics}, \emph{55}(1), 154-164.
 #' (\href{https://doi.org/10.1038/s41588-022-01225-6}{pub})
 #' @export
 

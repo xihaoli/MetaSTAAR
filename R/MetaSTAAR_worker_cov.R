@@ -25,9 +25,9 @@
 #' @return \code{GTSinvG_rare}: the sparse matrix of all variants in the variant-set
 #' whose minor allele frequency is below \code{cov_maf_cutoff} (the sparse weighted
 #' covariance file), stored as a rectangle format.
-#' @references Li, X., et al. (2022). Powerful, scalable and resource-efficient
+#' @references Li, X., et al. (2023). Powerful, scalable and resource-efficient
 #' meta-analysis of rare variant associations in large whole genome sequencing studies.
-#' \emph{Nature Genetics}.
+#' \emph{Nature Genetics}, \emph{55}(1), 154-164.
 #' (\href{https://doi.org/10.1038/s41588-022-01225-6}{pub})
 #' @export
 

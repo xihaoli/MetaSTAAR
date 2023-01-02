@@ -31,9 +31,9 @@
 #' @return \code{variant_adj_info}: the data frame or matrix of adjusted variant information (unique identifier)
 #' with p_adj rows (listed in the same order as the columns of \code{GTPG_cond}) and 4 columns: chromosome (chr),
 #' position (pos), reference allele (ref), alternative allele (alt), score statistic (U), and variance (V).
-#' @references Li, X., et al. (2022). Powerful, scalable and resource-efficient
+#' @references Li, X., et al. (2023). Powerful, scalable and resource-efficient
 #' meta-analysis of rare variant associations in large whole genome sequencing studies.
-#' \emph{Nature Genetics}.
+#' \emph{Nature Genetics}, \emph{55}(1), 154-164.
 #' (\href{https://doi.org/10.1038/s41588-022-01225-6}{pub})
 #' @export
 

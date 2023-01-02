@@ -32,9 +32,9 @@
 #' the standard error associated with the score test statistic (Score_SE), the estimated effect size of the minor allele (Est),
 #' the standard error associated with the estimated effect size (Est_se).
 #' If a variant in the merged variant list has standard error equal to 0, the p-value will be set as 1.
-#' @references Li, X., et al. (2022). Powerful, scalable and resource-efficient
+#' @references Li, X., et al. (2023). Powerful, scalable and resource-efficient
 #' meta-analysis of rare variant associations in large whole genome sequencing studies.
-#' \emph{Nature Genetics}.
+#' \emph{Nature Genetics}, \emph{55}(1), 154-164.
 #' (\href{https://doi.org/10.1038/s41588-022-01225-6}{pub})
 #' @export
 
