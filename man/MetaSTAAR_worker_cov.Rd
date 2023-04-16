@@ -41,7 +41,8 @@ is labeled as "PASS". If \code{qc_label} is NULL, it is assumed that all variant
 the sparse weighted covariance file is stored (default = 5e+05).}
 
 \item{signif.digits}{an integer indicating the number of significant digits to be used
-for storing the sparse weighted covariance file (default = 3).}
+for storing the sparse weighted covariance file. If \code{signif.digits} is NULL,
+it is assumed that no rounding will be performed (default = 3).}
 }
 \value{
 \code{GTSinvG_rare}: the sparse matrix of all variants in the variant-set

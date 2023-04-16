@@ -39,7 +39,7 @@
 
 MetaSTAAR_worker_cov_cond <- function(genotype,genotype_adj,obj_nullmodel,variant_info,variant_adj_info){
 
-  if(class(genotype)[1] != "matrix" && !(!is.null(attr(class(genotype), "package")) && attr(class(genotype), "package") == "Matrix")){
+  if(!inherits(genotype, "matrix") && !inherits(genotype, "sparseMatrix")){
     stop("genotype is not a matrix!")
   }
 
@@ -47,11 +47,11 @@ MetaSTAAR_worker_cov_cond <- function(genotype,genotype_adj,obj_nullmodel,varian
     stop(paste0("Dimensions don't match for genotype and variant_info!"))
   }
 
-  if(class(genotype_adj)[1] == "numeric" || class(genotype_adj)[1] == "integer"){
+  if(inherits(genotype_adj, "numeric") || inherits(genotype_adj, "integer")){
     genotype_adj <- matrix(genotype_adj, ncol=1)
   }
 
-  if(!is.null(attr(class(genotype_adj), "package")) && attr(class(genotype_adj), "package") == "Matrix"){
+  if(inherits(genotype_adj, "sparseMatrix")){
     genotype_adj <- as.matrix(genotype_adj)
   }
 
@@ -69,7 +69,7 @@ MetaSTAAR_worker_cov_cond <- function(genotype,genotype_adj,obj_nullmodel,varian
                                                                 "ref"="ref",
                                                                 "alt"="alt"))$index
 
-  if(!is.null(attr(class(genotype), "package")) && attr(class(genotype), "package") == "Matrix"){
+  if(inherits(genotype, "sparseMatrix")){
     genotype[,var.adj.index] <- 2 - genotype_adj
   }else{
     genotype <- matrix_flip(genotype)$Geno

@@ -21,7 +21,8 @@
 #' @param segment.size a numeric value indicating the length of each segment of which
 #' the sparse weighted covariance file is stored (default = 5e+05).
 #' @param signif.digits an integer indicating the number of significant digits to be used
-#' for storing the sparse weighted covariance file (default = 3).
+#' for storing the sparse weighted covariance file. If \code{signif.digits} is NULL,
+#' it is assumed that no rounding will be performed (default = 3).
 #' @return \code{GTSinvG_rare}: the sparse matrix of all variants in the variant-set
 #' whose minor allele frequency is below \code{cov_maf_cutoff} (the sparse weighted
 #' covariance file), stored as a rectangle format.
@@ -34,7 +35,7 @@
 MetaSTAAR_worker_cov <- function(genotype,obj_nullmodel,cov_maf_cutoff,
                                  variant_pos,region_midpos,qc_label=NULL,segment.size=5e5,signif.digits=3){
 
-  if(class(genotype)[1] != "matrix" && !(!is.null(attr(class(genotype), "package")) && attr(class(genotype), "package") == "Matrix")){
+  if(!inherits(genotype, "matrix") && !inherits(genotype, "sparseMatrix")){
     stop("genotype is not a matrix!")
   }
 
@@ -54,7 +55,7 @@ MetaSTAAR_worker_cov <- function(genotype,obj_nullmodel,cov_maf_cutoff,
     stop(paste0("Dimensions don't match for variant_pos and qc_label!"))
   }
 
-  if(!is.null(attr(class(genotype), "package")) && attr(class(genotype), "package") == "Matrix"){
+  if(inherits(genotype, "sparseMatrix")){
     MAF <- colMeans(genotype)/2
     if (!is.null(qc_label)){
       RV_label <- as.vector((MAF<cov_maf_cutoff)&(MAF>0)&(qc_label=="PASS"))
@@ -101,7 +102,7 @@ MetaSTAAR_worker_cov <- function(genotype,obj_nullmodel,cov_maf_cutoff,
   rm(Geno_rare,Geno_rare_1)
   gc()
 
-  GTSinvG_rare <- as(GTSinvG_rare,"dgTMatrix")
+  GTSinvG_rare <- as(GTSinvG_rare,"TsparseMatrix")
   row_pos <- (variant_pos[RV_label][variant_pos[RV_label] <= region_midpos])[(GTSinvG_rare@i)+1L]
   col_pos <- (variant_pos[RV_label])[(GTSinvG_rare@j)+1L]
   remove_ind <- (col_pos - row_pos > segment.size)
@@ -116,7 +117,9 @@ MetaSTAAR_worker_cov <- function(genotype,obj_nullmodel,cov_maf_cutoff,
   GTSinvG_rare <- as(GTSinvG_rare,"dgCMatrix")
 
   ### Create a version of GTSinvG_rare with rounded significant digits
-  GTSinvG_rare <- signif(GTSinvG_rare, digits = signif.digits)
+  if(!is.null(signif.digits)){
+    GTSinvG_rare <- signif(GTSinvG_rare, digits = signif.digits)
+  }
 
   ### Add row/column names to the sparse matrix
   colnames(GTSinvG_rare) <- variant_pos[RV_label]

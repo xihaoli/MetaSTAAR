@@ -6,6 +6,11 @@
 
 using namespace Rcpp;
 
+#ifdef RCPP_USE_GLOBAL_ROSTREAM
+Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
+Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
+#endif
+
 // Indiv_Score_Test_meta
 List Indiv_Score_Test_meta(arma::vec U, arma::vec V);
 RcppExport SEXP _MetaSTAAR_Indiv_Score_Test_meta(SEXP USEXP, SEXP VSEXP) {
