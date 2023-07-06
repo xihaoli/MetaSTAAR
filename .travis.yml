@@ -6,7 +6,18 @@ branches:
 
 language: r
 r:
-  - 4.3.0
+  - 4.1.2
+
+before_install:
+  - mkdir -p ~/.R
+  - echo 'CXX17 = g++-7 -std=gnu++17 -fPIC' > ~/.R/Makevars
+
+addons:
+  apt:
+    sources:
+      - sourceline: 'ppa:ubuntu-toolchain-r/test'
+    packages:
+      - g++-7
 
 warnings_are_errors: false
 
