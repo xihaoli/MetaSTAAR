@@ -46,10 +46,7 @@ MetaSTAAR_individual_analysis <- function(chr,start.loc,end.loc,study.names,samp
   if (end.loc <= segment * segment.size) {
     ### summary statistics
     sumstat.files <- paste0(sumstat.dir,"/summary.stat.",trait,".",study.names,".chr",chr,".segment",segment,".Rdata")
-    sumstat.list <- lapply(sumstat.files, function(x) {
-      load(file = x)
-      get(ls()[ls()!= "summary.stat"])
-    })
+    sumstat.list <- sapply(sumstat.files, function(x) mget(load(x)), simplify = TRUE)
     sumstat.list <- lapply(sumstat.list, function(x) {
       if (!(is.null(x)) && !("qc_label" %in% colnames(x))){
         data.frame(x[,1:4],qc_label="PASS",x[,5:dim(x)[2]],stringsAsFactors = FALSE)

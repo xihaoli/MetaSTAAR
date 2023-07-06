@@ -55,10 +55,7 @@ MetaSTAAR_merge_varlist <- function(chr,variant_pos,study.names,sample.sizes,sum
   if (max(variant_pos) <= segment * segment.size) {
     ### summary statistics
     sumstat.files <- paste0(sumstat.dir,"/summary.stat.",trait,".",study.names,".chr",chr,".segment",segment,".Rdata")
-    sumstat.list <- lapply(sumstat.files, function(x) {
-      load(file = x)
-      get(ls()[ls()!= "summary.stat"])
-    })
+    sumstat.list <- sapply(sumstat.files, function(x) mget(load(x)), simplify = TRUE)
     sumstat.list <- lapply(sumstat.list, function(x) {
       if (!(is.null(x)) && !("qc_label" %in% colnames(x))){
         data.frame(x[,1:4],qc_label="PASS",x[,5:dim(x)[2]],stringsAsFactors = FALSE)
@@ -114,10 +111,7 @@ MetaSTAAR_merge_varlist <- function(chr,variant_pos,study.names,sample.sizes,sum
 
     ### covariance matrices
     cov.files <- paste0(cov.dir,"/GTSinvG.rare.",trait,".",study.names,".chr",chr,".segment",segment,".Rdata")
-    cov.list <- lapply(cov.files, function(x) {
-      load(file = x)
-      get(ls()[ls()!= "cov"])
-    })
+    cov.list <- sapply(cov.files, function(x) mget(load(x)), simplify = TRUE)
     cov.list <- lapply(cov.list, function(x) {
       if (is.null(x)) {
         as(matrix(nrow=0,ncol=0),"dgCMatrix")
@@ -148,10 +142,7 @@ MetaSTAAR_merge_varlist <- function(chr,variant_pos,study.names,sample.sizes,sum
   }else if (max(variant_pos) <= (segment + 1) * segment.size) {
     ### summary statistics
     sumstat.files1 <- paste0(sumstat.dir,"/summary.stat.",trait,".",study.names,".chr",chr,".segment",segment,".Rdata")
-    sumstat.list1 <- lapply(sumstat.files1, function(x) {
-      load(file = x)
-      get(ls()[ls()!= "summary.stat"])
-    })
+    sumstat.list1 <- sapply(sumstat.files1, function(x) mget(load(x)), simplify = TRUE)
     sumstat.list1 <- lapply(sumstat.list1, function(x) {
       if (!(is.null(x)) && !("qc_label" %in% colnames(x))){
         data.frame(x[,1:4],qc_label="PASS",x[,5:dim(x)[2]],stringsAsFactors = FALSE)
@@ -170,10 +161,7 @@ MetaSTAAR_merge_varlist <- function(chr,variant_pos,study.names,sample.sizes,sum
     }, x = sumstat.list1, y = cov_maf_cutoff, SIMPLIFY = FALSE)
 
     sumstat.files2 <- paste0(sumstat.dir,"/summary.stat.",trait,".",study.names,".chr",chr,".segment",segment+1,".Rdata")
-    sumstat.list2 <- lapply(sumstat.files2, function(x) {
-      load(file = x)
-      get(ls()[ls()!= "summary.stat"])
-    })
+    sumstat.list2 <- sapply(sumstat.files2, function(x) mget(load(x)), simplify = TRUE)
     sumstat.list2 <- lapply(sumstat.list2, function(x) {
       if (!(is.null(x)) && !("qc_label" %in% colnames(x))){
         data.frame(x[,1:4],qc_label="PASS",x[,5:dim(x)[2]],stringsAsFactors = FALSE)
@@ -248,10 +236,7 @@ MetaSTAAR_merge_varlist <- function(chr,variant_pos,study.names,sample.sizes,sum
 
     ### covariance matrices
     cov.files1 <- paste0(cov.dir,"/GTSinvG.rare.",trait,".",study.names,".chr",chr,".segment",segment,".Rdata")
-    cov.list1 <- lapply(cov.files1, function(x) {
-      load(file = x)
-      get(ls()[ls()!= "cov"])
-    })
+    cov.list1 <- sapply(cov.files1, function(x) mget(load(x)), simplify = TRUE)
     cov.list1 <- mapply(function(x,y,z) {
       if (is.null(x)) {
         x <- as(matrix(nrow=length(y),ncol=(length(y)+length(z))),"dgCMatrix")
@@ -260,10 +245,7 @@ MetaSTAAR_merge_varlist <- function(chr,variant_pos,study.names,sample.sizes,sum
     }, x = cov.list1, y = position.index1, z = position.index2, SIMPLIFY = FALSE)
 
     cov.files2 <- paste0(cov.dir,"/GTSinvG.rare.",trait,".",study.names,".chr",chr,".segment",segment+1,".Rdata")
-    cov.list2 <- lapply(cov.files2, function(x) {
-      load(file = x)
-      get(ls()[ls()!= "cov"])
-    })
+    cov.list2 <- sapply(cov.files2, function(x) mget(load(x)), simplify = TRUE)
     cov.list2 <- lapply(cov.list2, function(x) {
       if (is.null(x)) {
         as(matrix(nrow=0,ncol=0),"dgCMatrix")

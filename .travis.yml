@@ -7,20 +7,11 @@ branches:
 language: r
 r:
   - 4.1.2
-  
-before_install:
-  - mkdir -p ~/.R
-  - echo 'CXX17 = g++-7 -std=gnu++17 -fPIC' > ~/.R/Makevars
-  - while travis_wait 50 sleep 300 &> /tmp/build.log || (tail -n 100 /tmp/build.log && exit 1); do echo "=====[ $SECONDS seconds, buildroot still building... ]====="; done
-
-addons:
-  apt:
-    sources:
-      - sourceline: 'ppa:ubuntu-toolchain-r/test'
-    packages:
-      - g++-7
 
 warnings_are_errors: false
+
+r_binary_packages:
+- glmnet
 
 bioc_packages:
 - GENESIS

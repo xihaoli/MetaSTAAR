@@ -39,7 +39,7 @@
 
 MetaSTAAR_worker_cov_cond <- function(genotype,genotype_adj,obj_nullmodel,variant_info,variant_adj_info){
 
-  if(!inherits(genotype, "matrix") && !inherits(genotype, "sparseMatrix")){
+  if(!inherits(genotype, "matrix") && !inherits(genotype, "Matrix")){
     stop("genotype is not a matrix!")
   }
 

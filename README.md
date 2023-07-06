@@ -25,7 +25,7 @@ Please see the <a href="docs/MetaSTAAR_manual.pdf">**MetaSTAAR** user manual</a>
 ## Data Availability
 The whole-genome functional annotation data assembled from a variety of sources and the precomputed annotation principal components are available at the [Functional Annotation of Variant - Online Resource (FAVOR)](https://favor.genohub.org) site and [FAVOR Essential Database](https://doi.org/10.7910/DVN/1VGTJI).
 ## Version
-The current version is 0.9.6.2 (July 5, 2023).
+The current version is 0.9.6.3 (November 18, 2023).
 ## Citation
 If you use **MetaSTAAR** for your work, please cite:
 

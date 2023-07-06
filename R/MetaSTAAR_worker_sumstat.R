@@ -26,7 +26,7 @@
 
 MetaSTAAR_worker_sumstat <- function(genotype,obj_nullmodel,variant_info,qc_label=NULL){
 
-  if(!inherits(genotype, "matrix") && !inherits(genotype, "sparseMatrix")){
+  if(!inherits(genotype, "matrix") && !inherits(genotype, "Matrix")){
     stop("genotype is not a matrix!")
   }
 
