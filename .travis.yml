@@ -8,10 +8,19 @@ language: r
 r:
   - 4.1.2
 
+before_script:
+  - while travis_wait 50 sleep 300 &> /tmp/build.log || (tail -n 100 /tmp/build.log && exit 1); do echo "=====[ $SECONDS seconds, buildroot still building... ]====="; done
+  
 before_install:
-  - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
-  - sudo apt-get -q update
-  - sudo apt-get -y install gcc-10.2
+  - mkdir -p ~/.R
+  - echo 'CXX17 = g++-7 -std=gnu++17 -fPIC' > ~/.R/Makevars
+
+addons:
+  apt:
+    sources:
+      - sourceline: 'ppa:ubuntu-toolchain-r/test'
+    packages:
+      - g++-7
 
 warnings_are_errors: false
 
