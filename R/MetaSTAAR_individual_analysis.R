@@ -103,10 +103,7 @@ MetaSTAAR_individual_analysis <- function(chr,start.loc,end.loc,study.names,samp
   }else if (end.loc <= (segment + 1) * segment.size) {
     ### summary statistics
     sumstat.files1 <- paste0(sumstat.dir,"/summary.stat.",trait,".",study.names,".chr",chr,".segment",segment,".Rdata")
-    sumstat.list1 <- lapply(sumstat.files1, function(x) {
-      load(file = x)
-      get(ls()[ls()!= "summary.stat"])
-    })
+    sumstat.list1 <- sapply(sumstat.files1, function(x) mget(load(x)), simplify = TRUE)
     sumstat.list1 <- lapply(sumstat.list1, function(x) {
       if (!(is.null(x)) && !("qc_label" %in% colnames(x))){
         data.frame(x[,1:4],qc_label="PASS",x[,5:dim(x)[2]],stringsAsFactors = FALSE)
@@ -125,10 +122,7 @@ MetaSTAAR_individual_analysis <- function(chr,start.loc,end.loc,study.names,samp
     }, x = sumstat.list1, y = cov_maf_cutoff, SIMPLIFY = FALSE)
 
     sumstat.files2 <- paste0(sumstat.dir,"/summary.stat.",trait,".",study.names,".chr",chr,".segment",segment+1,".Rdata")
-    sumstat.list2 <- lapply(sumstat.files2, function(x) {
-      load(file = x)
-      get(ls()[ls()!= "summary.stat"])
-    })
+    sumstat.list2 <- sapply(sumstat.files2, function(x) mget(load(x)), simplify = TRUE)
     sumstat.list2 <- lapply(sumstat.list2, function(x) {
       if (!(is.null(x)) && !("qc_label" %in% colnames(x))){
         data.frame(x[,1:4],qc_label="PASS",x[,5:dim(x)[2]],stringsAsFactors = FALSE)
