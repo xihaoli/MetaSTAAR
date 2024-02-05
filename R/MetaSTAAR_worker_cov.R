@@ -43,7 +43,7 @@ MetaSTAAR_worker_cov <- function(genotype,obj_nullmodel,cov_maf_cutoff,
     stop("cov_maf_cutoff should be a number between 0 and 0.5!")
   }
 
-  if (cov_maf_cutoff == 0.5){
+  if(cov_maf_cutoff == 0.5){
     cov_maf_cutoff <- 0.5 + 1e-16
   }
 
