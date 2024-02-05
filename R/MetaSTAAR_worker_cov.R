@@ -114,7 +114,7 @@ MetaSTAAR_worker_cov <- function(genotype,obj_nullmodel,cov_maf_cutoff,
   GTSinvG_rare@x <- GTSinvG_rare@x[!remove_ind]
   rm(remove_ind)
   gc()
-  GTSinvG_rare <- as(GTSinvG_rare,"dgCMatrix")
+  GTSinvG_rare <- as(GTSinvG_rare,"CsparseMatrix")
 
   ### Create a version of GTSinvG_rare with rounded significant digits
   if(!is.null(signif.digits)){
