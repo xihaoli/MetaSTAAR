@@ -380,8 +380,8 @@ MetaSTAAR_merge_cond <- function(chr,start.loc,end.loc,study.names,sample.sizes,
     if (effect.cond == "homogeneous") {
       U.rare.merge <- Reduce("+", lapply(sumstat.merge.list, function(x) {x[rv.index,][-ex.index,]$U}))
       U.adj.merge <- Reduce("+", U_adj.list)
-      cov.rare.adj.merge <- Reduce("+", lapply(GTPG_cond.list, function(x) {x[var.rare.index,]}))
-      cov.adj.merge <- Reduce("+", lapply(GTPG_cond.list, function(x) {x[var.adj.index,]}))
+      cov.rare.adj.merge <- Reduce("+", lapply(GTPG_cond.list, function(x) {x[var.rare.index,,drop=FALSE]}))
+      cov.adj.merge <- Reduce("+", lapply(GTPG_cond.list, function(x) {x[var.adj.index,,drop=FALSE]}))
       cov.rare.merge <- Reduce("+", mapply(function(x,y) {
         (x - as.matrix(y[,12:dim(y)[2]]) %*% t(as.matrix(y[,12:dim(y)[2]])))[rv.index, rv.index][-ex.index,-ex.index]
       }, x = cov.merge.list, y = sumstat.merge.list, SIMPLIFY = FALSE))
@@ -391,15 +391,15 @@ MetaSTAAR_merge_cond <- function(chr,start.loc,end.loc,study.names,sample.sizes,
     }else{
       U.merge <- Reduce("+", mapply(function(x,y,z) {
         x <- x[rv.index,][-ex.index,]$U
-        z.rare <- z[var.rare.index,]
-        z.adj <- z[var.adj.index,]
+        z.rare <- z[var.rare.index,,drop=FALSE]
+        z.adj <- z[var.adj.index,,drop=FALSE]
         return(x-z.rare%*%ginv(z.adj)%*%y) # Do not use solve()
       }, x = sumstat.merge.list, y = U_adj.list, z = GTPG_cond.list, SIMPLIFY = FALSE))
 
       cov.merge <- Reduce("+", mapply(function(x,y,z) {
         cov <- (x - as.matrix(y[,12:dim(y)[2]]) %*% t(as.matrix(y[,12:dim(y)[2]])))[rv.index, rv.index][-ex.index,-ex.index]
-        z.rare <- z[var.rare.index,]
-        z.adj <- z[var.adj.index,]
+        z.rare <- z[var.rare.index,,drop=FALSE]
+        z.adj <- z[var.adj.index,,drop=FALSE]
         return(cov-z.rare%*%ginv(z.adj)%*%t(z.rare))
       }, x = cov.merge.list, y = sumstat.merge.list, z = GTPG_cond.list, SIMPLIFY = FALSE))
     }
@@ -407,8 +407,8 @@ MetaSTAAR_merge_cond <- function(chr,start.loc,end.loc,study.names,sample.sizes,
     if (effect.cond == "homogeneous") {
       U.rare.merge <- Reduce("+", lapply(sumstat.merge.list, function(x) {x[rv.index,]$U}))
       U.adj.merge <- Reduce("+", U_adj.list)
-      cov.rare.adj.merge <- Reduce("+", lapply(GTPG_cond.list, function(x) {x[var.rare.index,]}))
-      cov.adj.merge <- Reduce("+", lapply(GTPG_cond.list, function(x) {x[var.adj.index,]}))
+      cov.rare.adj.merge <- Reduce("+", lapply(GTPG_cond.list, function(x) {x[var.rare.index,,drop=FALSE]}))
+      cov.adj.merge <- Reduce("+", lapply(GTPG_cond.list, function(x) {x[var.adj.index,,drop=FALSE]}))
       cov.rare.merge <- Reduce("+", mapply(function(x,y) {
         (x - as.matrix(y[,12:dim(y)[2]]) %*% t(as.matrix(y[,12:dim(y)[2]])))[rv.index, rv.index]
       }, x = cov.merge.list, y = sumstat.merge.list, SIMPLIFY = FALSE))
@@ -418,15 +418,15 @@ MetaSTAAR_merge_cond <- function(chr,start.loc,end.loc,study.names,sample.sizes,
     }else{
       U.merge <- Reduce("+", mapply(function(x,y,z) {
         x <- x[rv.index,]$U
-        z.rare <- z[var.rare.index,]
-        z.adj <- z[var.adj.index,]
+        z.rare <- z[var.rare.index,,drop=FALSE]
+        z.adj <- z[var.adj.index,,drop=FALSE]
         return(x-z.rare%*%ginv(z.adj)%*%y) # Do not use solve()
       }, x = sumstat.merge.list, y = U_adj.list, z = GTPG_cond.list, SIMPLIFY = FALSE))
 
       cov.merge <- Reduce("+", mapply(function(x,y,z) {
         cov <- (x - as.matrix(y[,12:dim(y)[2]]) %*% t(as.matrix(y[,12:dim(y)[2]])))[rv.index, rv.index]
-        z.rare <- z[var.rare.index,]
-        z.adj <- z[var.adj.index,]
+        z.rare <- z[var.rare.index,,drop=FALSE]
+        z.adj <- z[var.adj.index,,drop=FALSE]
         return(cov-z.rare%*%ginv(z.adj)%*%t(z.rare))
       }, x = cov.merge.list, y = sumstat.merge.list, z = GTPG_cond.list, SIMPLIFY = FALSE))
     }
