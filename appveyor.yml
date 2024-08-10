@@ -16,6 +16,7 @@ environment:
   - R_VERSION: 4.2.3
     R_ARCH: x64
     BIOC_USE_DEVEL: FALSE
+    USE_RTOOLS: TRUE
     PKGTYPE: binary
 
 branches:
@@ -23,6 +24,8 @@ branches:
     - main
 
 build_script:
+  - Rscript -e install.packages('https://cloud.r-project.org/bin/windows/contrib/4.2/Matrix_1.6-5.zip',type='source',repos=NULL)
+  - Rscript -e install.packages('https://cloud.r-project.org/bin/windows/contrib/4.2/nloptr_2.0.3.zip',type='source',repos=NULL)
   - travis-tool.sh install_bioc_deps
   - travis-tool.sh install_deps
   - travis-tool.sh install_bioc GENESIS
