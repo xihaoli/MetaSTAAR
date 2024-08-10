@@ -26,6 +26,7 @@ branches:
 build_script:
   - Rscript -e install.packages('https://cloud.r-project.org/bin/windows/contrib/4.2/Matrix_1.6-5.zip',type='source',repos=NULL)
   - Rscript -e install.packages('https://cloud.r-project.org/bin/windows/contrib/4.2/nloptr_2.0.3.zip',type='source',repos=NULL)
+  - Rscript -e install.packages('https://cloud.r-project.org/bin/windows/contrib/4.2/RCurl_1.98-1.14.zip',type='source',repos=NULL)
   - travis-tool.sh install_bioc_deps
   - travis-tool.sh install_deps
   - travis-tool.sh install_bioc GENESIS
