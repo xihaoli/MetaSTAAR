@@ -25,7 +25,7 @@ branches:
 build_script:
   - travis-tool.sh install_bioc_deps
   - travis-tool.sh install_deps
-  - travis-tool.sh install_bioc GenomeInfoDbData
+  - travis-tool.sh install_bioc GENESIS
   - travis-tool.sh install_github xihaoli/STAAR
 
 test_script:
